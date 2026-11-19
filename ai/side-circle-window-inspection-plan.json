@@ -1,0 +1,12 @@
+{
+  "schema": "warirak.side-circle-window-inspection-plan.v1",
+  "role": "Inspect saved complete event/final records only; no simulation rollout, policy trial, tuning or training",
+  "inputs": ["work/proactive-selector-v1-dev-r1/candidate-side_circle_current.json", "work/proactive-selector-v1-dev-r1/reference-side_circle_current.json"],
+  "method": "Deduplicate original recorded observation times per role. Reconstruct the frozen navigation mask only where an immediately preceding contiguous record supplies the actual previous request or explicit null. Join recorded proposal reasons by original time where available; never synthesize missing history.",
+  "capture": "Original times, known previous request, reconstructed allowed requests, current original request, original range status/directional minima and recorded reason if available",
+  "limits": ["Stored windows are bounded and omit early initial frames. Do not reconstruct full trajectories or initial policy decisions.", "A permitted FORWARD request is not a safety certificate or a counterfactual proof that it should be chosen.", "Reference and candidate follow different trajectories; these records are not isolated causal interventions."],
+  "new_rollouts": 0,
+  "training_started": false,
+  "validation_or_test_opened": false,
+  "physical_motor_transport": false
+}

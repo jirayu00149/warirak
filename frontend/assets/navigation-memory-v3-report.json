@@ -1,0 +1,484 @@
+{
+  "schema": "warirak.navigation-experiment-outcome.v1",
+  "created_at": "2026-10-28T12:29:16.996891+00:00",
+  "experiment": "navigation-memory-v3",
+  "environment": "warirak-pool-memory-v3",
+  "source": "simulation",
+  "outcome": "research_candidate_selected_not_deployed",
+  "selected_episodes": 40000,
+  "candidates_trained": [
+    16000,
+    40000
+  ],
+  "validation_gate_passed": true,
+  "production_promoted": false,
+  "production_policy_unchanged": true,
+  "production_runtime_supported": false,
+  "real_world_validated": false,
+  "control_enabled": false,
+  "test_used_for_selection": false,
+  "selection": {
+    "protocol": {
+      "schema": "warirak.navigation-memory-protocol.v1",
+      "environment": "warirak-pool-memory-v3",
+      "hypothesis": "Explicit neutral STOP, two issued-command history and short last-seen target-side memory can reduce delayed-command and sensor-dropout failures while preserving nominal performance.",
+      "candidates": [
+        16000,
+        40000
+      ],
+      "training_seed": 12000000,
+      "training_profile_mix": "25%nominal/75%stress",
+      "validation": {
+        "nominal_seed": 14000000,
+        "stress_seed": 14500000,
+        "episodes_per_profile": 500
+      },
+      "test": {
+        "nominal_seed": 16000000,
+        "stress_seed": 16500000,
+        "episodes_per_profile": 1000
+      },
+      "selection_split": "validation",
+      "test_used_for_selection": false,
+      "minimum_stress_success_gain": 0.01,
+      "maximum_stress_collision_increase": 0.005,
+      "maximum_nominal_success_drop": 0.01,
+      "maximum_nominal_collision_increase": 0.005,
+      "tie_break": "stress success minus twice collision; then nominal mean steps",
+      "baselines": "published v1 Q-table mapped explicitly to v3 actions1..5; rules; same v3 physics and supervisors for all controllers",
+      "supervision": "Host and receiver check noisy observed clearances; STOP is neutral, immediate and flushes pending commands. Startup queue is neutral. Passive current still acts during STOP.",
+      "learning": {
+        "alpha": 0.04,
+        "gamma": 0.97,
+        "epsilon_floor": 0.04,
+        "epsilon_decay_component": 0.46,
+        "epsilon_decay_fraction": 0.85,
+        "max_steps": 320
+      },
+      "state_space": {
+        "bearing_states": 20,
+        "range_bins": 3,
+        "obstacle_states": 9,
+        "issued_command_history": 2,
+        "actions": 6,
+        "states": 19440
+      },
+      "field_validated": false,
+      "production_runtime_supported": false,
+      "limitations": [
+        "Synthetic observations and coarse range, not actual YOLO frames/depth",
+        "Normalized synthetic thrust and idealized priority STOP; no physical inertia/watchdog calibration",
+        "Fresh simulation seeds do not establish boat-field generalization",
+        "Changed schema is incompatible with the deployed 5-action Q-table; do not overwrite it"
+      ],
+      "frozen_before_training": true,
+      "baseline_sha256": "84ff710df630b0ed4b3b17df9f9e41866ae2a7db715f06e1a9d7e2ae2b5610a7",
+      "source_sha256": {
+        "ai/navigation_memory_env.mjs": "306a236137f542e330cf0201c279bf1a18f399300fcbf7b42f82105846e5fb93",
+        "ai/navigation_memory_train.mjs": "15aeeec131df7521ea7dd174f368a8593268eaf73d95f8ea2963bcfdb5e643fa",
+        "ai/train_navigation_memory.mjs": "30651777045caca5ae76d7e1db3b8efb33c15ffedc27cbacd616901235c76837"
+      }
+    },
+    "baseline": {
+      "nominal": {
+        "schema": "warirak.navigation-memory-evaluation.v1",
+        "environment": "warirak-pool-memory-v3",
+        "source": "simulation",
+        "controller": "legacy",
+        "profile": "nominal",
+        "seed": 14000000,
+        "episodes": 500,
+        "collections": 227,
+        "collisions": 170,
+        "timeouts": 103,
+        "success_rate": 0.454,
+        "collision_rate": 0.34,
+        "mean_steps": 136.746,
+        "host_supervisor_stop_steps": 54215,
+        "receiver_supervisor_stop_steps": 0,
+        "explicit_stop_steps": 0,
+        "shared_supervisors_enabled": true,
+        "control_enabled": false,
+        "real_world_validated": false
+      },
+      "stress": {
+        "schema": "warirak.navigation-memory-evaluation.v1",
+        "environment": "warirak-pool-memory-v3",
+        "source": "simulation",
+        "controller": "legacy",
+        "profile": "stress",
+        "seed": 14500000,
+        "episodes": 500,
+        "collections": 271,
+        "collisions": 214,
+        "timeouts": 15,
+        "success_rate": 0.542,
+        "collision_rate": 0.428,
+        "mean_steps": 80.698,
+        "host_supervisor_stop_steps": 14296,
+        "receiver_supervisor_stop_steps": 625,
+        "explicit_stop_steps": 852,
+        "shared_supervisors_enabled": true,
+        "control_enabled": false,
+        "real_world_validated": false
+      }
+    },
+    "trials": [
+      {
+        "episodes": 16000,
+        "metrics": {
+          "nominal": {
+            "schema": "warirak.navigation-memory-evaluation.v1",
+            "environment": "warirak-pool-memory-v3",
+            "source": "simulation",
+            "controller": "memory",
+            "profile": "nominal",
+            "seed": 14000000,
+            "episodes": 500,
+            "collections": 352,
+            "collisions": 97,
+            "timeouts": 51,
+            "success_rate": 0.704,
+            "collision_rate": 0.194,
+            "mean_steps": 99.276,
+            "host_supervisor_stop_steps": 16530,
+            "receiver_supervisor_stop_steps": 0,
+            "explicit_stop_steps": 4799,
+            "shared_supervisors_enabled": true,
+            "control_enabled": false,
+            "real_world_validated": false
+          },
+          "stress": {
+            "schema": "warirak.navigation-memory-evaluation.v1",
+            "environment": "warirak-pool-memory-v3",
+            "source": "simulation",
+            "controller": "memory",
+            "profile": "stress",
+            "seed": 14500000,
+            "episodes": 500,
+            "collections": 331,
+            "collisions": 150,
+            "timeouts": 19,
+            "success_rate": 0.662,
+            "collision_rate": 0.3,
+            "mean_steps": 90.614,
+            "host_supervisor_stop_steps": 7701,
+            "receiver_supervisor_stop_steps": 700,
+            "explicit_stop_steps": 2900,
+            "shared_supervisors_enabled": true,
+            "control_enabled": false,
+            "real_world_validated": false
+          }
+        },
+        "eligible": true
+      },
+      {
+        "episodes": 40000,
+        "metrics": {
+          "nominal": {
+            "schema": "warirak.navigation-memory-evaluation.v1",
+            "environment": "warirak-pool-memory-v3",
+            "source": "simulation",
+            "controller": "memory",
+            "profile": "nominal",
+            "seed": 14000000,
+            "episodes": 500,
+            "collections": 352,
+            "collisions": 87,
+            "timeouts": 61,
+            "success_rate": 0.704,
+            "collision_rate": 0.174,
+            "mean_steps": 105.048,
+            "host_supervisor_stop_steps": 19433,
+            "receiver_supervisor_stop_steps": 0,
+            "explicit_stop_steps": 7109,
+            "shared_supervisors_enabled": true,
+            "control_enabled": false,
+            "real_world_validated": false
+          },
+          "stress": {
+            "schema": "warirak.navigation-memory-evaluation.v1",
+            "environment": "warirak-pool-memory-v3",
+            "source": "simulation",
+            "controller": "memory",
+            "profile": "stress",
+            "seed": 14500000,
+            "episodes": 500,
+            "collections": 345,
+            "collisions": 129,
+            "timeouts": 26,
+            "success_rate": 0.69,
+            "collision_rate": 0.258,
+            "mean_steps": 93.226,
+            "host_supervisor_stop_steps": 7027,
+            "receiver_supervisor_stop_steps": 911,
+            "explicit_stop_steps": 2314,
+            "shared_supervisors_enabled": true,
+            "control_enabled": false,
+            "real_world_validated": false
+          }
+        },
+        "eligible": true
+      }
+    ],
+    "selected_episodes": 40000,
+    "test_used_for_selection": false
+  },
+  "evaluation": {
+    "source": "simulation",
+    "environment": "warirak-pool-memory-v3",
+    "baseline": {
+      "nominal": {
+        "schema": "warirak.navigation-memory-evaluation.v1",
+        "environment": "warirak-pool-memory-v3",
+        "source": "simulation",
+        "controller": "legacy",
+        "profile": "nominal",
+        "seed": 16000000,
+        "episodes": 1000,
+        "collections": 458,
+        "collisions": 364,
+        "timeouts": 178,
+        "success_rate": 0.458,
+        "collision_rate": 0.364,
+        "mean_steps": 134.483,
+        "host_supervisor_stop_steps": 105982,
+        "receiver_supervisor_stop_steps": 0,
+        "explicit_stop_steps": 0,
+        "shared_supervisors_enabled": true,
+        "control_enabled": false,
+        "real_world_validated": false
+      },
+      "stress": {
+        "schema": "warirak.navigation-memory-evaluation.v1",
+        "environment": "warirak-pool-memory-v3",
+        "source": "simulation",
+        "controller": "legacy",
+        "profile": "stress",
+        "seed": 16500000,
+        "episodes": 1000,
+        "collections": 526,
+        "collisions": 419,
+        "timeouts": 55,
+        "success_rate": 0.526,
+        "collision_rate": 0.419,
+        "mean_steps": 91.343,
+        "host_supervisor_stop_steps": 32605,
+        "receiver_supervisor_stop_steps": 1726,
+        "explicit_stop_steps": 1868,
+        "shared_supervisors_enabled": true,
+        "control_enabled": false,
+        "real_world_validated": false
+      }
+    },
+    "candidate": {
+      "nominal": {
+        "schema": "warirak.navigation-memory-evaluation.v1",
+        "environment": "warirak-pool-memory-v3",
+        "source": "simulation",
+        "controller": "memory",
+        "profile": "nominal",
+        "seed": 16000000,
+        "episodes": 1000,
+        "collections": 735,
+        "collisions": 175,
+        "timeouts": 90,
+        "success_rate": 0.735,
+        "collision_rate": 0.175,
+        "mean_steps": 101.468,
+        "host_supervisor_stop_steps": 36290,
+        "receiver_supervisor_stop_steps": 0,
+        "explicit_stop_steps": 12177,
+        "shared_supervisors_enabled": true,
+        "control_enabled": false,
+        "real_world_validated": false
+      },
+      "stress": {
+        "schema": "warirak.navigation-memory-evaluation.v1",
+        "environment": "warirak-pool-memory-v3",
+        "source": "simulation",
+        "controller": "memory",
+        "profile": "stress",
+        "seed": 16500000,
+        "episodes": 1000,
+        "collections": 679,
+        "collisions": 272,
+        "timeouts": 49,
+        "success_rate": 0.679,
+        "collision_rate": 0.272,
+        "mean_steps": 96.596,
+        "host_supervisor_stop_steps": 16920,
+        "receiver_supervisor_stop_steps": 1902,
+        "explicit_stop_steps": 4922,
+        "shared_supervisors_enabled": true,
+        "control_enabled": false,
+        "real_world_validated": false
+      }
+    },
+    "rules": {
+      "nominal": {
+        "schema": "warirak.navigation-memory-evaluation.v1",
+        "environment": "warirak-pool-memory-v3",
+        "source": "simulation",
+        "controller": "rule",
+        "profile": "nominal",
+        "seed": 16000000,
+        "episodes": 1000,
+        "collections": 544,
+        "collisions": 189,
+        "timeouts": 267,
+        "success_rate": 0.544,
+        "collision_rate": 0.189,
+        "mean_steps": 141.936,
+        "host_supervisor_stop_steps": 55519,
+        "receiver_supervisor_stop_steps": 0,
+        "explicit_stop_steps": 0,
+        "shared_supervisors_enabled": true,
+        "control_enabled": false,
+        "real_world_validated": false
+      },
+      "stress": {
+        "schema": "warirak.navigation-memory-evaluation.v1",
+        "environment": "warirak-pool-memory-v3",
+        "source": "simulation",
+        "controller": "rule",
+        "profile": "stress",
+        "seed": 16500000,
+        "episodes": 1000,
+        "collections": 577,
+        "collisions": 356,
+        "timeouts": 67,
+        "success_rate": 0.577,
+        "collision_rate": 0.356,
+        "mean_steps": 95.195,
+        "host_supervisor_stop_steps": 29593,
+        "receiver_supervisor_stop_steps": 478,
+        "explicit_stop_steps": 1928,
+        "shared_supervisors_enabled": true,
+        "control_enabled": false,
+        "real_world_validated": false
+      }
+    },
+    "selected_episodes": 40000,
+    "test_used_for_selection": false,
+    "real_world_validated": false
+  },
+  "failure_diagnostics": {
+    "created_at": "2026-10-28T12:27:06.920Z",
+    "source": "simulation",
+    "test_used_for_diagnosis": false,
+    "case_limit_per_profile": 3,
+    "cases": [
+      {
+        "profile": "nominal",
+        "seed": 14000005,
+        "steps": 259,
+        "collision": true,
+        "consecutive_zero_applied_steps_before_collision": 94,
+        "host_supervisor_stop_steps": 141,
+        "receiver_stop_steps": 0,
+        "passive_drift": {
+          "x": -0.02123934909584932,
+          "y": -0.009862890295917168
+        },
+        "diagnostic_tag": "passive_drift_after_stop",
+        "selection_source": "validation failure inspection; not test or model selection"
+      },
+      {
+        "profile": "nominal",
+        "seed": 14000006,
+        "steps": 133,
+        "collision": true,
+        "consecutive_zero_applied_steps_before_collision": 100,
+        "host_supervisor_stop_steps": 99,
+        "receiver_stop_steps": 0,
+        "passive_drift": {
+          "x": -0.018974389010109005,
+          "y": -0.013577787615358829
+        },
+        "diagnostic_tag": "passive_drift_after_stop",
+        "selection_source": "validation failure inspection; not test or model selection"
+      },
+      {
+        "profile": "nominal",
+        "seed": 14000013,
+        "steps": 66,
+        "collision": true,
+        "consecutive_zero_applied_steps_before_collision": 28,
+        "host_supervisor_stop_steps": 34,
+        "receiver_stop_steps": 0,
+        "passive_drift": {
+          "x": -0.019957989819813518,
+          "y": 0.012733035493874922
+        },
+        "diagnostic_tag": "passive_drift_after_stop",
+        "selection_source": "validation failure inspection; not test or model selection"
+      },
+      {
+        "profile": "stress",
+        "seed": 14500000,
+        "steps": 185,
+        "collision": true,
+        "consecutive_zero_applied_steps_before_collision": 62,
+        "host_supervisor_stop_steps": 67,
+        "receiver_stop_steps": 9,
+        "passive_drift": {
+          "x": -0.005975249968469143,
+          "y": -0.019029402546584608
+        },
+        "diagnostic_tag": "passive_drift_after_stop",
+        "selection_source": "validation failure inspection; not test or model selection"
+      },
+      {
+        "profile": "stress",
+        "seed": 14500002,
+        "steps": 47,
+        "collision": true,
+        "consecutive_zero_applied_steps_before_collision": 24,
+        "host_supervisor_stop_steps": 24,
+        "receiver_stop_steps": 1,
+        "passive_drift": {
+          "x": 0.021551068760454654,
+          "y": -0.04319548305124044
+        },
+        "diagnostic_tag": "passive_drift_after_stop",
+        "selection_source": "validation failure inspection; not test or model selection"
+      },
+      {
+        "profile": "stress",
+        "seed": 14500009,
+        "steps": 96,
+        "collision": true,
+        "consecutive_zero_applied_steps_before_collision": 20,
+        "host_supervisor_stop_steps": 23,
+        "receiver_stop_steps": 0,
+        "passive_drift": {
+          "x": -0.02868414517492056,
+          "y": -0.042009428404271604
+        },
+        "diagnostic_tag": "passive_drift_after_stop",
+        "selection_source": "validation failure inspection; not test or model selection"
+      }
+    ],
+    "limitation": "Purposive failure examples, not failure-rate estimates or proof of a causal mechanism in physical hardware"
+  },
+  "engineering_review": {
+    "decision": "do_not_deploy",
+    "reasons": [
+      "Validation stress collision25.8% and nominal17.4% already too high for operational readiness",
+      "Selected candidate still collides272/1000 in held-out synthetic stress cases",
+      "Several inspected validation failures drift into obstacles while commanded STOP",
+      "New schema/runtime is incompatible with the deployed 5-action policy; no hardware calibration"
+    ],
+    "criterion_note": "Frozen comparative validation gates selected a research candidate; they were not a field-safety certification. Engineering refusal to deploy does not change the candidate selection or select a different model on test."
+  },
+  "limitations": [
+    "Synthetic target observations/range; no YOLO video or boat-camera validation",
+    "Comparison uses identical new memory-v3 physics and supervisors for all controllers; original v1 simulation98.1% is a different setting",
+    "Inspected six validation failures are purposive examples, not a full failure-cause rate estimate",
+    "No new production policy or real motor commands"
+  ],
+  "protocol_sha256": "190e67feeec3349a49ed74358301fbebf94fe71479eac241dadbd53243604312",
+  "policy_sha256": "4d0ee11959fd4c61c5a58fe80159217fc8551452eb2d67f14fde427b32ab2096",
+  "deployed_policy_sha256": "84ff710df630b0ed4b3b17df9f9e41866ae2a7db715f06e1a9d7e2ae2b5610a7"
+}

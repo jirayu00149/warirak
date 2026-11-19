@@ -1,0 +1,9 @@
+{
+  "schema": "warirak.confidence-calibration.v1",
+  "selection_split": "val",
+  "method": "maximum smoothed per-class validation F1; confidence bounded to 0.05\u20130.95",
+  "thresholds": {
+    "plastic_bottle": 0.12112112112112113,
+    "bottle_cap": 0.4894894894894895
+  }
+}

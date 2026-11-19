@@ -1,0 +1,41 @@
+{
+  "schema": "warirak.proactive-sidecar-v2-repair-plan.v1",
+  "scope": "Versioned recorder repair and deterministic regression checks only; no selector performance trial, training, validation, test or deployment",
+  "new_stream_schema": "warirak.proactive-sidecar.v2",
+  "new_wrapper_schema": "warirak.proactive-sidecar-r2-step.v2",
+  "known_issue_evidence": "outputs/Warirak_Proactive_Selector_v1_Artifact_Review.json",
+  "hypothesis": "A newer cached frame can have been generated inside R2 without ever being observed fresh by the sidecar. Monotonic cached metadata may be retained for diagnosis without becoming fresh range evidence.",
+  "changed_behavior": [
+    "Validate cached_wait/stale snapshot provenance, flags, original time, sequence and bounded ray payload before accepting changed metadata.",
+    "Allow newer monotonic cached metadata and advance range high-water marks; keep all cached range features unknown and evidence_new.range=false.",
+    "Mark cached_metadata_advanced separately, never as a new independent fresh range frame."
+  ],
+  "preserved_behavior": [
+    "Frozen v1 sources, protocols, tests, results and observer source remain untouched.",
+    "Reject same-sequence payload conflicts, future timestamps, sequence/time regression and cached-to-fresh relabeling.",
+    "Keep original times, bounded history/ledger/events, immutable returned copies, independent measured motion and exact ACK identity.",
+    "Keep recorder-only cancel/fault semantics, explicit fresh disarmed reset, manual/disarm precedence, 400ms command lifetime and zero generated/physical commands.",
+    "The wrapper passes the original caller request/null unchanged to the unchanged R2 plant; inertia/current/guards remain authoritative."
+  ],
+  "test_recipe": {
+    "inherited_invariants": "Run the existing 26 behavioral invariant cases against the NEW v2 implementation and wrapper, not against v1 again.",
+    "new_regressions": [
+      "Seen fresh19@1900, unseen cached20@2000, fresh21@2100",
+      "Replay only already-saved pre-fault packets into v2; no plant/policy rollout",
+      "First cached stream, multiple unseen cached advances and high-water marks",
+      "Rotated heading cache remains unknown, including ray projections",
+      "Conflicting/regressing/future metadata and false fresh flags remain rejected",
+      "Cached metadata with equal capture time cannot later be counted fresh",
+      "Small unchanged-R2 step then packet-loss integration reproduces the unseen-cache path",
+      "v2 schemas are explicit and all frozen v1 evidence hashes remain unchanged"
+    ],
+    "unit_fixture_limit": "The small parser-path integration fixture fixes random range dropout to zero solely to guarantee a newly generated internal range frame before explicit packet-loss injection; current remains0.08m/s and stress noise/gains otherwise remain. It is not a collection/collision benchmark or a difficulty change to any closed trial."
+  },
+  "gate": "All v2 deterministic checks pass, cached ray features always unknown, fresh count not inflated, old hashes unchanged, wrapped/original R2 snapshots equal in controlled tests; engineering review still required",
+  "selector_v1_approval_changes": false,
+  "selector_v1_side_circle_regression_resolved_by_this_repair": false,
+  "new_performance_trial_allowed": false,
+  "training_allowed": false,
+  "validation_or_test_opened": false,
+  "physical_motor_transport": false
+}

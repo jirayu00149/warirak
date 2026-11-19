@@ -1,0 +1,107 @@
+{
+  "schema": "warirak.navigation-only-experiment-protocol.v1",
+  "environment": "warirak-pool-mission-v4r2-dev",
+  "model_schema": "warirak.navigation-only-q-policy.v1",
+  "hypothesis": "Separating supervisor/operator assistance from the learner exploration alphabet can avoid random absorbing manual-assistance requests while preserving every frozen R2 safety guard, physics condition and outcome denominator.",
+  "training": {
+    "episodes": 6000,
+    "seed": 30000000,
+    "alpha": 0.05,
+    "gamma": 0.985,
+    "epsilon_floor": 0.04,
+    "epsilon_start": 0.4
+  },
+  "training_profile_mix": "25%nominal/75%stress by absolute episode index",
+  "candidates": [
+    2000,
+    6000
+  ],
+  "candidate_recipe": "Two snapshots of ONE6000episode trajectory; epsilon decay uses6000 for both; no independent repeated training or automatic extension",
+  "checkpoint_every_episodes": 100,
+  "validation": {
+    "nominal_seed": 32000000,
+    "stress_seed": 32500000,
+    "episodes_per_profile": 200
+  },
+  "test": {
+    "nominal_seed": 34000000,
+    "stress_seed": 34500000,
+    "episodes_per_profile": 400
+  },
+  "selection_split": "validation",
+  "test_used_for_selection": false,
+  "test_requires_explicit_engineering_review": true,
+  "baselines": [
+    "legacy_mapped",
+    "rules_with_hold"
+  ],
+  "baseline_comparison": "Both baseline adapters and learner use the same seven navigation requests and same unchanged R2 plant/sensors/guards. Research/readiness gate values are identical to R2; no removal of current, faults, long latency or assistance outcomes.",
+  "gates": {
+    "research": {
+      "nominal": {
+        "min_success": 0.6,
+        "max_collision": 0.15,
+        "max_timeout": 0.35,
+        "max_assistance": 0.35,
+        "max_hard_unavailable": 0.1,
+        "max_range_wait_fraction": 0.15
+      },
+      "stress": {
+        "min_success": 0.35,
+        "max_collision": 0.4,
+        "max_timeout": 0.6,
+        "max_assistance": 0.65,
+        "max_hard_unavailable": 0.5,
+        "max_range_wait_fraction": 0.15
+      }
+    },
+    "min_stress_success_gain": 0.02,
+    "max_nominal_success_drop": 0.01,
+    "max_collision_increase": 0.005,
+    "interpretation": "Research comparison only, not a safe-operation or deployment threshold. Includes600ms transport-delay cases that cannot meet400ms command lifetime.",
+    "readiness": {
+      "min_success_each_profile": 0.85,
+      "max_collision_each_profile": 0.01,
+      "max_hard_unavailable_each_profile": 0.05,
+      "compatible_runtime_required": true,
+      "hardware_calibration_required_for_physical_control": true
+    }
+  },
+  "tie_break": "stress_success -2*stress_collision -0.25*stress_hard_unavailable; then nominal success; then nominal mean steps",
+  "rollout": "Run to actual collision/collection/960step timeout. Assistance is NOT early episode termination; passive current continues. All fault/unavailability/timeout cases remain in denominators.",
+  "reward": "Training-only world-distance potential3*(before-after), -0.015/step, +40collection, -30collision, -10first assistance. Reward truth is not exposed to controller features.",
+  "features": {
+    "schema": "warirak.navigation-only-features.v1",
+    "radices": [
+      17,
+      3,
+      9,
+      3,
+      5,
+      4,
+      7
+    ],
+    "state_count": 192780,
+    "order": [
+      "target bearing/unseen",
+      "range bin",
+      "front mask/invalid",
+      "HOLD readiness/near surround",
+      "mission mode/evidence",
+      "independent heading-projected velocity/unknown",
+      "previous REQUESTED action"
+    ],
+    "coordinates_exposed_to_q_learner": false,
+    "action_count": 7,
+    "q_storage": "sparse visited rows; missing rows use frozen rules; no giant dense table"
+  },
+  "prior_test_exposure": "R2validation26m/26.5m exposed, R2test28m/28.5m still closed; this round uses new train30m,validation32m/32.5m,test34m/34.5m. No old test is used.",
+  "field_validated": false,
+  "production_runtime_supported": false,
+  "control_enabled": false,
+  "compute": "one bounded local CPU Node process; no paid service; checkpoint+resume with source/protocol hash checks",
+  "failure_policy": "Retain published detector/public5action policy if no research candidate passes. Do not add epochs, weaken guards, remove current or exclude difficult seeds. A research pass ends at candidate_ready_for_review with test still closed.",
+  "decision_interface": "warirak.navigation-only-interface.v1",
+  "hypothesis_basis": "work/mission-r2-postmortem/diagnostic.json; bounded fixed-context training-scene diagnostic, not attribution of the historical training population",
+  "action_ownership": "AI requests only STOP/FORWARD/TURN/PIVOT/HOLD. RECOVERY_REQUEST stays available through explicit simulated-operator API; independent measured-stall/progress/ACK/manual/watchdog guards remain unchanged."
+}

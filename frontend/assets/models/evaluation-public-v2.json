@@ -1,0 +1,174 @@
+{
+  "schema": "warirak.evaluation.v1",
+  "source": "measured_evaluation",
+  "created_at": "2026-10-27T16:14:37.862338+00:00",
+  "model": "warirak-yolo26n-public-v2.pt",
+  "split": "test",
+  "imgsz": 800,
+  "metric_definition": "mAP follows Ultralytics detection evaluation. Precision and recall are fixed-validation-threshold IoU-0.5 PR curves, not a field collection success rate.",
+  "overall": {
+    "precision": 0.5050467285486456,
+    "recall": 0.4746519055256021,
+    "map50": 0.42228977499927345,
+    "map50_95": 0.29436768237466276
+  },
+  "classes": {
+    "plastic_bottle": {
+      "precision": 0.3978117162760848,
+      "recall": 0.47959183673469385,
+      "map50": 0.36110954408648877,
+      "map50_95": 0.2340432823638118,
+      "confidence_threshold": 0.12112112112112113
+    },
+    "bottle_cap": {
+      "precision": 0.6122817408212065,
+      "recall": 0.46971197431651035,
+      "map50": 0.48347000591205813,
+      "map50_95": 0.3546920823855137,
+      "confidence_threshold": 0.4894894894894895
+    }
+  },
+  "evaluated_class_ids": [
+    0,
+    1
+  ],
+  "dataset": {
+    "valid": true,
+    "errors": [],
+    "warnings": [
+      "45 boxes are smaller than eight pixels on at least one side"
+    ],
+    "images": 1325,
+    "groups": 564,
+    "counts": {
+      "train": 1036,
+      "val": 147,
+      "test": 142
+    },
+    "instances": {
+      "train": [
+        875,
+        746
+      ],
+      "val": [
+        88,
+        40
+      ],
+      "test": [
+        98,
+        37
+      ]
+    },
+    "negative_images": 234
+  },
+  "complete": true,
+  "confidence_calibration": {
+    "schema": "warirak.confidence-calibration.v1",
+    "selection_split": "val",
+    "method": "maximum smoothed per-class validation F1; confidence bounded to 0.05\u20130.95",
+    "thresholds": {
+      "plastic_bottle": 0.12112112112112113,
+      "bottle_cap": 0.4894894894894895
+    }
+  },
+  "model_selection": {
+    "schema": "warirak.detector-selection.v1",
+    "protocol": {
+      "schema": "warirak.evaluation-protocol.v1",
+      "created_before_test_evaluation": true,
+      "candidate_models": [
+        "warmup_best",
+        "cap_refinement_best"
+      ],
+      "candidate_resolutions": [
+        640,
+        800,
+        960,
+        1280
+      ],
+      "letterbox": "fixed square, rect=False for consistent exported inference",
+      "selection_split": "val",
+      "selection_criterion": "maximum macro mAP50-95; exact ties prefer the smaller input",
+      "confidence_selection": "smoothed per-class validation F1",
+      "test_results_used_for_selection": false,
+      "final_test": "Evaluate the model and resolution selected exclusively from validation",
+      "field_validated": false
+    },
+    "protocol_sha256": "e9997e645a20ad2fe0bbc6ec63d488975c3d1e4e764a08302d38287c06cad6de",
+    "validation_results": [
+      {
+        "model": "cap_refinement_best",
+        "weights": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-22\\solid-mini-prototype-scale-model-350\\warirak-cloudflare\\ai\\runs\\public-yolo26n-v2\\refinement\\weights\\best.pt",
+        "imgsz": 800,
+        "map50": 0.512177719573799,
+        "map50_95": 0.3834660892017702
+      },
+      {
+        "model": "cap_refinement_best",
+        "weights": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-22\\solid-mini-prototype-scale-model-350\\warirak-cloudflare\\ai\\runs\\public-yolo26n-v2\\refinement\\weights\\best.pt",
+        "imgsz": 960,
+        "map50": 0.49483971067996313,
+        "map50_95": 0.3830075577701775
+      },
+      {
+        "model": "cap_refinement_best",
+        "weights": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-22\\solid-mini-prototype-scale-model-350\\warirak-cloudflare\\ai\\runs\\public-yolo26n-v2\\refinement\\weights\\best.pt",
+        "imgsz": 1280,
+        "map50": 0.44189175551115,
+        "map50_95": 0.33841078853742246
+      },
+      {
+        "model": "cap_refinement_best",
+        "weights": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-22\\solid-mini-prototype-scale-model-350\\warirak-cloudflare\\ai\\runs\\public-yolo26n-v2\\refinement\\weights\\best.pt",
+        "imgsz": 640,
+        "map50": 0.46422686985896633,
+        "map50_95": 0.33114856438108653
+      },
+      {
+        "model": "warmup_best",
+        "weights": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-22\\solid-mini-prototype-scale-model-350\\warirak-cloudflare\\ai\\runs\\public-yolo26n-v2\\baseline.pt",
+        "imgsz": 800,
+        "map50": 0.41488627377963516,
+        "map50_95": 0.25189856097421787
+      },
+      {
+        "model": "warmup_best",
+        "weights": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-22\\solid-mini-prototype-scale-model-350\\warirak-cloudflare\\ai\\runs\\public-yolo26n-v2\\baseline.pt",
+        "imgsz": 960,
+        "map50": 0.3985672809179196,
+        "map50_95": 0.24665580793760475
+      },
+      {
+        "model": "warmup_best",
+        "weights": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-22\\solid-mini-prototype-scale-model-350\\warirak-cloudflare\\ai\\runs\\public-yolo26n-v2\\baseline.pt",
+        "imgsz": 640,
+        "map50": 0.4174590748630154,
+        "map50_95": 0.23898508045497172
+      },
+      {
+        "model": "warmup_best",
+        "weights": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-22\\solid-mini-prototype-scale-model-350\\warirak-cloudflare\\ai\\runs\\public-yolo26n-v2\\baseline.pt",
+        "imgsz": 1280,
+        "map50": 0.352957942576273,
+        "map50_95": 0.2152483760028518
+      }
+    ],
+    "selected": {
+      "model": "cap_refinement_best",
+      "imgsz": 800,
+      "map50": 0.512177719573799,
+      "map50_95": 0.3834660892017702
+    },
+    "test_results_used_for_selection": false
+  },
+  "weights_sha256": "dd61b6697fd4f5d97e8df4be7a611c44ea72e292cb16893688ea2083a7a94db8",
+  "dataset_manifest_sha256": "60137cc826f031daeaf63e44cf85c3e3ffa81ed32d665a2a7e25fa54817ec20d",
+  "training_source": "public_litter_datasets",
+  "boat_camera_validated": false,
+  "real_world_validated": false,
+  "limitations": [
+    "Public data only; not a university-pond field test",
+    "Source capture groups are inferred and image similarity filtering cannot prove all scene independence",
+    "Test has 37 cap instances, so cap estimates have considerable uncertainty"
+  ]
+}

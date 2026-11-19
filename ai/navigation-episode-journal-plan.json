@@ -1,0 +1,18 @@
+{
+  "schema": "warirak.navigation-episode-journal-preflight-plan.v1",
+  "scope": "Additive software review repair only. Do not rerun earlier11Node+9Python checks. No plant steps, optimizer updates, training or held-out evaluation.",
+  "review_issue": "The base commit store retains only two checkpoint generations, including result files; this alone cannot preserve every historical episode outcome for a real training run.",
+  "change": "New JournaledEpisodeCommitStore wrapper preserves immutable bounded per-episode result+manifest receipts and hash chain before any old generation can be pruned. Existing base source/tests/evidence stay frozen.",
+  "journal_limit": "64MiB total,8KiB input result,16KiB receipt, source protocol seed budget; max4preserved pending receipt files. No journal pruning. All records must be contiguous, bind seed/protocol/result/manifest and match committed head. No silent rollback, orphan promotion or backfill claim for old unjournaled completed history.",
+  "tests": "tests/test_navigation_commit_journal.py:four new cases only",
+  "minimum_passed": 4,
+  "unit_storage_seeds": [11300,11301,11302,11303,11304],
+  "checks": ["All five synthetic outcomes survive two-checkpoint retention", "Pre/post-pointer controlled interruptions archive only committed data", "Tampered/missing older outcome fails before pruning", "Journal budget, unjournaled completed history and future receipt protection"],
+  "crash_scope": "Controlled exceptions, not OS hard kill or power-loss durability; leftover process lock still needs inspection.",
+  "actual_training_started": false,
+  "plant_steps_started": false,
+  "optimizer_updates": 0,
+  "validation_partition_opened": false,
+  "test_partition_opened": false,
+  "physical_motor_transport": false
+}

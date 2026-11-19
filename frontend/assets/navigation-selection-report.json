@@ -1,0 +1,180 @@
+{
+  "selected_episodes": 20000,
+  "trials": [
+    {
+      "episodes": 20000,
+      "validation": {
+        "schema": "warirak.navigation-evaluation.v1",
+        "source": "simulation",
+        "environment": "warirak-pool-v1",
+        "seed": 2000000,
+        "episodes": 1000,
+        "results": [
+          {
+            "controller": "learned",
+            "episodes": 1000,
+            "collections": 987,
+            "collisions": 10,
+            "timeouts": 3,
+            "success_rate": 0.987,
+            "collision_rate": 0.01,
+            "mean_steps": 56.214
+          },
+          {
+            "controller": "rule",
+            "episodes": 1000,
+            "collections": 562,
+            "collisions": 199,
+            "timeouts": 239,
+            "success_rate": 0.562,
+            "collision_rate": 0.199,
+            "mean_steps": 118.669
+          },
+          {
+            "controller": "random",
+            "episodes": 1000,
+            "collections": 22,
+            "collisions": 978,
+            "timeouts": 0,
+            "success_rate": 0.022,
+            "collision_rate": 0.978,
+            "mean_steps": 42.924
+          }
+        ],
+        "real_world_validated": false
+      },
+      "score": 0.967
+    },
+    {
+      "episodes": 8000,
+      "validation": {
+        "schema": "warirak.navigation-evaluation.v1",
+        "source": "simulation",
+        "environment": "warirak-pool-v1",
+        "seed": 2000000,
+        "episodes": 1000,
+        "results": [
+          {
+            "controller": "learned",
+            "episodes": 1000,
+            "collections": 979,
+            "collisions": 11,
+            "timeouts": 10,
+            "success_rate": 0.979,
+            "collision_rate": 0.011,
+            "mean_steps": 60.128
+          },
+          {
+            "controller": "rule",
+            "episodes": 1000,
+            "collections": 562,
+            "collisions": 199,
+            "timeouts": 239,
+            "success_rate": 0.562,
+            "collision_rate": 0.199,
+            "mean_steps": 118.669
+          },
+          {
+            "controller": "random",
+            "episodes": 1000,
+            "collections": 22,
+            "collisions": 978,
+            "timeouts": 0,
+            "success_rate": 0.022,
+            "collision_rate": 0.978,
+            "mean_steps": 42.924
+          }
+        ],
+        "real_world_validated": false
+      },
+      "score": 0.957
+    },
+    {
+      "episodes": 16000,
+      "validation": {
+        "schema": "warirak.navigation-evaluation.v1",
+        "source": "simulation",
+        "environment": "warirak-pool-v1",
+        "seed": 2000000,
+        "episodes": 1000,
+        "results": [
+          {
+            "controller": "learned",
+            "episodes": 1000,
+            "collections": 770,
+            "collisions": 7,
+            "timeouts": 223,
+            "success_rate": 0.77,
+            "collision_rate": 0.007,
+            "mean_steps": 108.662
+          },
+          {
+            "controller": "rule",
+            "episodes": 1000,
+            "collections": 562,
+            "collisions": 199,
+            "timeouts": 239,
+            "success_rate": 0.562,
+            "collision_rate": 0.199,
+            "mean_steps": 118.669
+          },
+          {
+            "controller": "random",
+            "episodes": 1000,
+            "collections": 22,
+            "collisions": 978,
+            "timeouts": 0,
+            "success_rate": 0.022,
+            "collision_rate": 0.978,
+            "mean_steps": 42.924
+          }
+        ],
+        "real_world_validated": false
+      },
+      "score": 0.756
+    }
+  ],
+  "test": {
+    "schema": "warirak.navigation-evaluation.v1",
+    "source": "simulation",
+    "environment": "warirak-pool-v1",
+    "seed": 3000000,
+    "episodes": 1000,
+    "results": [
+      {
+        "controller": "learned",
+        "episodes": 1000,
+        "collections": 981,
+        "collisions": 14,
+        "timeouts": 5,
+        "success_rate": 0.981,
+        "collision_rate": 0.014,
+        "mean_steps": 57.523
+      },
+      {
+        "controller": "rule",
+        "episodes": 1000,
+        "collections": 563,
+        "collisions": 211,
+        "timeouts": 226,
+        "success_rate": 0.563,
+        "collision_rate": 0.211,
+        "mean_steps": 124.134
+      },
+      {
+        "controller": "random",
+        "episodes": 1000,
+        "collections": 20,
+        "collisions": 980,
+        "timeouts": 0,
+        "success_rate": 0.02,
+        "collision_rate": 0.98,
+        "mean_steps": 42.011
+      }
+    ],
+    "real_world_validated": false
+  },
+  "sha256": "84ff710df630b0ed4b3b17df9f9e41866ae2a7db715f06e1a9d7e2ae2b5610a7",
+  "control_enabled": false,
+  "real_world_validated": false
+}

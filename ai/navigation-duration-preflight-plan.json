@@ -1,0 +1,34 @@
+{
+  "schema": "warirak.navigation-duration-preflight-plan.v1",
+  "scope": "Duration-aware learner/replay/checkpoint SOFTWARE checks only. Saved bridge unit examples and explicit synthetic arithmetic; no plant stepping, real training episodes, model evaluation or held-out opening.",
+  "hypothesis": "A variable-duration masked Double-DQN target can learn from recorded request-gap credit without losing rewards, fabricating STOP, retiming frames or applying the one-step discount to every interval.",
+  "recipe": "ai/navigation-duration-dqn-recipe.json",
+  "model_schema": "warirak.navigation-history-duration-double-dqn.v1",
+  "checkpoint_schema": "warirak.navigation-duration-dqn-checkpoint.v1",
+  "input_credit_schema": "warirak.navigation-duration-credit.v1",
+  "preserved": ["Frozen one-step learner/recipe/source/tests stay unchanged", "Same234value canonical encoder,64x64network,7navigation requests and CPUfloat32/Adam/private RNG recipe", "No operator action or motor-derived observed velocity", "Original100ms clocks/record spans,epoch boundaries and natural terminal outcomes", "All passive-prefix/failed episode outcomes stay in journal, no invented replay action", "Safe weights_only file loading and same-runtime between-episode resume"],
+  "duration_rules": {
+    "steps": "Integer1..960; original next-observation delta=100*duration and record delta=duration",
+    "discount": "Original gamma0.985 raised to duration, retainedfloat64 in replay and castfloat32 only for neural target arithmetic",
+    "reward": "Discounted bound64*(1-gamma^duration)/(1-gamma), raw bound64*duration. Validate without clipping to64.",
+    "epoch": "Canonical Node encoder owns exact within-epoch history. At changed epoch no present next frame may be at/before starting observation. Later frames within new epoch may accumulate during a multi-step wait; do not require them all to be zero.",
+    "target": "Permitted online argmax then target-network value multiplied by sample discount. Natural terminal has no bootstrap; assistance alone not terminal.",
+    "resume": "New replay carries duration/discount/raw reward/reason/original capture+encoding clocks/record identities/epochs. New model+checkpoint+recipe identities cannot load as old one-step. Reuse base network/Adam/RNG validator only with isolated empty base replay; duration samples never retyped as one-step."
+  },
+  "test_recipe": {
+    "target": "tests/test_navigation_duration_dqn.py",
+    "minimum_passed": 18,
+    "saved_input": "work/navigation-episode-preflight/bridge-transitions.json; already exposed software unit records only, not training data. No original packets retimed or old R2 tests rerun.",
+    "synthetic_input": "tests/fixtures/navigation-duration-credits.json:four explicitly generated arithmetic cases(duration2,2,4,960) from canonical Node encoder with hand-defined simulated feature rows. No environment import or rollout;960case is not a measured timeout episode.",
+    "checks": ["Saved native one-step and duration credits accepted with original metadata", "Sample-specific masked Double-DQN target", "Natural terminal no bootstrap", "Accumulated reward above64 retained", "Malformed duration/discount/time/record/action/flags rejected", "Valid later new-epoch history versus leaked starting frame", "Bounded replay copy and exact evidence restoration", "Finite gradient and target cadence", "Private RNG and exact safe file resume of three subsequent variable-duration updates", "Incompatible old/new checkpoints and failed restore atomicity", "Journaled commit interoperability", "Finite reward bounds/current-frame age evidence"],
+    "unit_gradient_budget": "At most16synthetic optimizer updates total; no project training run or accuracy score",
+    "storage_fixture_seed": 11400,
+    "temporary_cleanup": "Resolved temporary target must be a duration-dqn-unit-* direct child of workspace/work before recursive cleanup."
+  },
+  "gate": "All18new tests and upstream hashes pass, then review only for full runner/complete training-protocol implementation. No actual training, field or deployment approval from these unit checks.",
+  "actual_training_started": false,
+  "plant_steps_started": false,
+  "validation_partition_opened": false,
+  "test_partition_opened": false,
+  "physical_motor_transport": false
+}

@@ -1,0 +1,15 @@
+{
+  "schema": "warirak.navigation-window-review-plan.v1",
+  "input": "work/navigation-r3-postmortem/diagnostic.json",
+  "role": "Inspect recorded windows only; no simulation rollout, Q updates, validation or test",
+  "case_filter": "All cases with timeline_category collision_after_clearance_only_stop, separately for each original fixed controller",
+  "measurements": "Original ray directions at first clearance-only STOP, pre-event request names, original frame times, recorded pose/motion projection and window duration",
+  "limitations": [
+    "Reduced diagnostic snapshots omit target and full sensor/armed/manual/battery metadata; exact original Q-feature/action-mask reconstruction is impossible from these snapshots alone.",
+    "Do not synthesize omitted fields, reconstruct complete historical training or infer range rates from rotating body-relative rays.",
+    "Windows are at most ten transitions and are deliberately selected around a known event; descriptive counts are not a new performance benchmark or population causal attribution."
+  ],
+  "model_or_input_mutation": false,
+  "training_started": false,
+  "physical_motor_transport": false
+}

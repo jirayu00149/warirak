@@ -1,0 +1,53 @@
+{
+  "schema": "warirak.proactive-observation-contract.v1",
+  "feature_schema": "warirak.proactive-observation.v1",
+  "record_schema": "warirak.proactive-observation-record.v1",
+  "issued_control_schema": "warirak.proactive-issued-control.v1",
+  "role": "Stateless synthetic observation summary and complete audit-input capture",
+  "input_schema": "warirak.mission-sim-observation.v2",
+  "plant_environment": "warirak-pool-mission-v4r2-dev",
+  "source": "simulation",
+  "maximum_original_evidence_age_ms": 300,
+  "maximum_pose_motion_range_skew_ms": 100,
+  "maximum_issued_control_records": 16,
+  "maximum_original_command_lifetime_ms": 400,
+  "range": {
+    "directions_rad": [0,0.7853981633974483,1.5707963267948966,2.356194490192345,3.141592653589793,-2.356194490192345,-1.5707963267948966,-0.7853981633974483],
+    "unknown": null,
+    "statuses": ["fresh_complete", "fresh_partial", "unknown"],
+    "cached_frames_are_fresh_features": false,
+    "same_ray_surface_tracking_implemented": false,
+    "range_rate_or_time_to_collision_implemented": false,
+    "gaps_between_rays_certified_clear": false
+  },
+  "motion": {
+    "accepted_method": "simulation_position_difference",
+    "accepted_frame": "pool_fixed",
+    "body_projection": "forward=vx*cos(heading)+vy*sin(heading); lateral=-vx*sin(heading)+vy*cos(heading)",
+    "velocity_from_commands": false,
+    "absolute_world_position_in_policy_features": false,
+    "projection_margin": "Engineering margin from declared synthetic noise only; not certified coverage or a hardware bound"
+  },
+  "ack": {
+    "matching": "Original issued control sequence, request sequence, normalized left/right values and original time window",
+    "feedback_at_expiry": "May match historical evidence under frozen R2 feedback semantics; command is no longer valid at processing",
+    "feedback_time_semantics": "End-of-integration-step synthetic feedback; not exact receiver application time or measured transport latency",
+    "digital_ack_proves_mechanical_motion": false,
+    "neutral_report_proves_stationary": false
+  },
+  "capture": {
+    "original_full_observation_retained": true,
+    "original_issued_controls_retained": true,
+    "full_diagnostic_record_is_policy_input": false,
+    "independent_camera_capture_timestamp_available": false,
+    "target_time": "Synthetic observation envelope only; no fabricated camera timestamp"
+  },
+  "stateless": true,
+  "sequence_replay_or_clock_regression_tracker_implemented": false,
+  "policy_or_proactive_action_selector_implemented": false,
+  "automatic_timers_or_watchdog_implemented": false,
+  "training_protocol_ready": false,
+  "website_runtime_supported": false,
+  "physical_motor_transport": false,
+  "control_enabled": false
+}

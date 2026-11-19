@@ -1,0 +1,18 @@
+{
+  "schema":"warirak.mission-postmortem-plan.v1",
+  "role":"bounded mechanism diagnostic on already-used training scenes; no model training or benchmark selection",
+  "closed_run":"work/navigation-mission-r2-experiment",
+  "training_episode_indices":[0,1,2,3,4,5,6,7,8,9,10,11],
+  "contexts":[
+    {"name":"fixed_rule_prior_start_exploration","greedy":"fixed_rules","epsilon":0.4},
+    {"name":"frozen_snapshot6000_end_exploration","greedy":"snapshot6000","epsilon":0.04}
+  ],
+  "randomization":"same per-episode RNG formula as closed runner, but no Q updates; fixed context is not a replay of historical evolving training tables",
+  "capture":"first assistance request/action/exploration flag/kernel reason, original observation times, applied digital output, and physical tail to natural episode end",
+  "aggregates":"first-assistance ownership/reason counts only; no task-success or collision-rate benchmark",
+  "source_or_model_mutation":false,
+  "validation_or_test_seeds_allowed":false,
+  "training_started":false,
+  "physical_motor_transport":false,
+  "interpretation":"Two contexts differ in both epsilon and policy, so their difference is not an isolated epsilon intervention. A diagnosed explicit request trigger establishes only the mechanism in that sampled trajectory, not the cause of all historical failures."
+}

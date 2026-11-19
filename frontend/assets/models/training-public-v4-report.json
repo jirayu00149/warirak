@@ -1,0 +1,99 @@
+{
+  "schema": "warirak.training-outcome.v1",
+  "created_at": "2026-10-28T11:34:44.893821+00:00",
+  "outcome": "promoted",
+  "published_release": "public-v4-2026-10-28",
+  "previous_release": "public-v2-2026-10-27",
+  "actual_epochs_completed": 27,
+  "epochs_planned": 45,
+  "early_stopping_patience": 12,
+  "best_training_checkpoint_epoch": 15,
+  "dataset_images": 1715,
+  "dataset_counts": {
+    "train": 1426,
+    "val": 147,
+    "test": 142
+  },
+  "additional_images": 0,
+  "selection": {
+    "protocol": {
+      "schema": "warirak.balanced-protocol.v1",
+      "frozen_before_training": true,
+      "base_weights_sha256": "dd61b6697fd4f5d97e8df4be7a611c44ea72e292cb16893688ea2083a7a94db8",
+      "dataset_manifest_sha256": "9faac846e5f36f93d7a25a4769f88ab7eaca63fdc63563d354aeda4dceaf17ca",
+      "recipe": {
+        "imgsz": 800,
+        "batch": 8,
+        "epochs": 45,
+        "optimizer": "AdamW",
+        "lr0": 8e-05,
+        "cls_pw": 0.5,
+        "seed": 61,
+        "patience": 12,
+        "cos_lr": true,
+        "close_mosaic": 10,
+        "mosaic": 0.15,
+        "scale": 0.4,
+        "hsv_s": 0.45,
+        "hsv_v": 0.3,
+        "fliplr": 0.5,
+        "flipud": 0.0,
+        "degrees": 5.0,
+        "mixup": 0.0,
+        "workers": 0,
+        "cache": false,
+        "deterministic": true,
+        "save_period": -1,
+        "amp": true
+      },
+      "evaluation_imgsz": 800,
+      "rect": false,
+      "selection_split": "val",
+      "min_macro_gain": 0.003,
+      "max_class_drop": 0.02,
+      "test_used_for_selection": false,
+      "test_is_historical": true,
+      "validation_previously_exposed": true,
+      "fresh_independent_test_available": false,
+      "field_validated": false,
+      "hypothesis": "Inverse-frequency class weighting and lower learning rate can recover cap performance lost in v3 without inventing additional images",
+      "reference": "https://docs.ultralytics.com/modes/train/#train-settings"
+    },
+    "baseline_map50_95": 0.3831831529280695,
+    "candidate_map50_95": 0.3907725407444323,
+    "baseline_classes": {
+      "plastic_bottle": 0.3715981462239365,
+      "bottle_cap": 0.3947681596322025
+    },
+    "candidate_classes": {
+      "plastic_bottle": 0.39197459191001405,
+      "bottle_cap": 0.3895704895788506
+    },
+    "promote": true,
+    "test_used_for_selection": false
+  },
+  "selection_split": "val",
+  "test_used_for_selection": false,
+  "historical_test_evaluated_in_this_run": true,
+  "test_is_historical": true,
+  "validation_previously_exposed": true,
+  "fresh_independent_test_available": false,
+  "boat_camera_validated": false,
+  "real_world_validated": false,
+  "ncnn_export_verified": true,
+  "ncnn_metric_difference": {
+    "map50": 0.0011568188405564062,
+    "map50_95": 0.0008362963650312416
+  },
+  "weights_sha256": "70c0206ea2fbd161bf86d205166b3416dd2f6db198fd87bf98079e8b50425a89",
+  "dataset_manifest_sha256": "9faac846e5f36f93d7a25a4769f88ab7eaca63fdc63563d354aeda4dceaf17ca",
+  "dataset_delivery": "Warirak_YOLO_Public_Dataset_v3.zip (same1715images; no duplicate dataset archive)",
+  "navigation_policy_changed": false,
+  "navigation_policy_sha256": "84ff710df630b0ed4b3b17df9f9e41866ae2a7db715f06e1a9d7e2ae2b5610a7",
+  "limitations": [
+    "Repeatedly used validation; existing historical test already exposed",
+    "No boat-camera dataset or field results",
+    "No measured Raspberry Pi FPS",
+    "234negative images under15%;49tinyboxes; inferred capture groups"
+  ]
+}

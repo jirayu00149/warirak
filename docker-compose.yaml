@@ -1,0 +1,27 @@
+# Coolify: New Resource → (your Git repo) → Build Pack "Docker Compose" → this file.
+services:
+  warirak:
+    build: .
+    restart: unless-stopped
+    environment:
+      - SERVICE_FQDN_WARIRAK_3000
+      - WARIRAK_PUBLIC_MONITOR=${WARIRAK_PUBLIC_MONITOR:-true}
+      - WARIRAK_OWNER_USER_ID=${WARIRAK_OWNER_USER_ID:-owner}
+      - WARIRAK_BACKUP_INTERVAL_HOURS=${WARIRAK_BACKUP_INTERVAL_HOURS:-24}
+      - WARIRAK_BACKUP_KEEP=${WARIRAK_BACKUP_KEEP:-14}
+      # Optional off-server copy (S3 / Cloudflare R2 / Backblaze B2). Leave empty to disable.
+      - WARIRAK_BACKUP_S3_ENDPOINT=${WARIRAK_BACKUP_S3_ENDPOINT:-}
+      - WARIRAK_BACKUP_S3_REGION=${WARIRAK_BACKUP_S3_REGION:-auto}
+      - WARIRAK_BACKUP_S3_BUCKET=${WARIRAK_BACKUP_S3_BUCKET:-}
+      - WARIRAK_BACKUP_S3_PREFIX=${WARIRAK_BACKUP_S3_PREFIX:-warirak/}
+      - WARIRAK_BACKUP_S3_ACCESS_KEY_ID=${WARIRAK_BACKUP_S3_ACCESS_KEY_ID:-}
+      - WARIRAK_BACKUP_S3_SECRET_ACCESS_KEY=${WARIRAK_BACKUP_S3_SECRET_ACCESS_KEY:-}
+    volumes:
+      - warirak-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+volumes:
+  warirak-data:

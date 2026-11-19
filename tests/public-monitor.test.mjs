@@ -1,0 +1,14 @@
+import test from'node:test';import assert from'node:assert/strict';import fs from'node:fs';import{SQLiteDatabase}from'../backend/sqlite.mjs';import{handleApi}from'../backend/api.mjs';import{Repository}from'../backend/repository.mjs';import{jpeg}from'./jpeg-fixture.mjs';
+function setup(){const db=new SQLiteDatabase(),dir=new URL('../migrations/',import.meta.url);for(const n of fs.readdirSync(dir).filter(n=>n.endsWith('.sql')).sort())db.sqlite.exec(fs.readFileSync(new URL(n,dir),'utf8'));return db;}
+function call(db,path,{method='GET',body,userId=null,token,publicMonitorEnabled=true}={}){return handleApi(new Request('https://test.invalid'+path,{method,headers:{'Content-Type':'application/json','X-Warirak-Client':'dashboard',Origin:'https://test.invalid',...(token?{Authorization:'Bearer '+token}:{})},...(body===undefined?{}:{body:JSON.stringify(body)})}),{db,userId,ownerUserId:'owner',publicMonitorEnabled});}
+test('public read works without a user while role and all writes remain protected',async()=>{const db=setup();try{
+ const session=await(await call(db,'/api/session')).json();assert.equal(session.role,'anonymous');assert.equal(session.can_admin,false);assert.equal(session.public_monitor_enabled,true);
+ const monitor=await call(db,'/api/monitor?date=2026-10-27');assert.equal(monitor.status,200);const data=await monitor.json();assert.equal(data.source,'hardware');assert.equal('members'in data,false);assert.equal('owner_id'in data,false);
+ for(const[path,method,body]of[['/api/devices','GET'],['/api/devices','POST',{name:'fake'}],['/api/admin/members','GET'],['/api/admin/invitations','POST',{}],['/api/simulation/sync','POST',{missions:[],role:'admin'}],['/api/device/frame','POST',{}],['/api/device/collections','POST',{}]])assert.equal((await call(db,path,{method,body})).status,401,path);
+ assert.equal((await call(db,'/api/devices',{userId:'stranger'})).status,403);assert.equal((await call(db,'/api/monitor?date=2026-10-27',{publicMonitorEnabled:false})).status,401);
+ }finally{db.close();}});
+test('only the opted-in workspace latest camera can be read anonymously',async()=>{const db=setup();try{
+ const device=await new Repository(db).createDevice('owner','Public test boat');db.sqlite.prepare('INSERT INTO camera_frames VALUES(?,?,?,?,?,?,?,?,?)').run('owner',device.id,'fixture',Date.now(),Date.now(),64,36,jpeg,'fixture');
+ const path='/api/live/devices/'+device.id+'/frame.jpg';const response=await call(db,path);assert.equal(response.status,200);assert.deepEqual(new Uint8Array(await response.arrayBuffer()),jpeg);assert.equal((await call(db,path,{publicMonitorEnabled:false})).status,401);
+ db.sqlite.prepare('UPDATE devices SET revoked_at_ms=? WHERE owner_id=? AND id=?').run(Date.now(),'owner',device.id);assert.equal((await call(db,path)).status,404);
+ }finally{db.close();}});

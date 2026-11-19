@@ -1,0 +1,11 @@
+{
+  "schema": "warirak.model-release.v1",
+  "version": "public-v2-2026-10-27",
+  "pytorch": "/assets/models/warirak-yolo26n-public-v2.pt",
+  "ncnn": "/assets/models/warirak-yolo26n-public-v2-ncnn.zip",
+  "package": "/assets/models/Warirak_AI_Trained_Models_2026-10-27.zip",
+  "evaluation": "/assets/models/evaluation-public-v2.json",
+  "calibration": "/assets/models/confidence-calibration-public-v2.json",
+  "weights_sha256": "dd61b6697fd4f5d97e8df4be7a611c44ea72e292cb16893688ea2083a7a94db8",
+  "field_validated": false
+}

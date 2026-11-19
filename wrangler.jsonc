@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "warirak-monitor",
+  "account_id": "dc56cb30396cdc7f956521c73f0317ef",
+  "main": "worker/index.mjs",
+  "compatibility_date": "2026-05-15",
+  "workers_dev": true,
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true },
+  "vars": { "WARIRAK_OWNER_USER_ID": "owner", "WARIRAK_PUBLIC_MONITOR": "true" },
+  "durable_objects": {
+    "bindings": [{ "name": "LIVE_CAMERAS", "class_name": "LiveCamera" }]
+  },
+  "migrations": [{ "tag": "camera-stream-v1", "new_sqlite_classes": ["LiveCamera"] }],
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "warirak-db",
+    "database_id": "32d19695-fa5c-42f7-977e-c2ab9435954c",
+    "migrations_dir": "migrations"
+  }],
+  "observability": { "enabled": true, "head_sampling_rate": 0.1 }
+}

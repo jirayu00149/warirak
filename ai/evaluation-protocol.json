@@ -1,0 +1,13 @@
+{
+  "schema": "warirak.evaluation-protocol.v1",
+  "created_before_test_evaluation": true,
+  "candidate_models": ["warmup_best", "cap_refinement_best"],
+  "candidate_resolutions": [640, 800, 960, 1280],
+  "letterbox": "fixed square, rect=False for consistent exported inference",
+  "selection_split": "val",
+  "selection_criterion": "maximum macro mAP50-95; exact ties prefer the smaller input",
+  "confidence_selection": "smoothed per-class validation F1",
+  "test_results_used_for_selection": false,
+  "final_test": "Evaluate the model and resolution selected exclusively from validation",
+  "field_validated": false
+}

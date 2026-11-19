@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 680" fill="none">
+<title>วารีรักษ์ — ภาพแนวคิดเรือเก็บขยะสองทุ่น</title>
+<defs>
+ <linearGradient id="hull" x1="200" y1="250" x2="420" y2="540" gradientUnits="userSpaceOnUse"><stop stop-color="#55846b"/><stop offset="1" stop-color="#1b4639"/></linearGradient>
+ <linearGradient id="deck" x1="300" y1="250" x2="600" y2="470" gradientUnits="userSpaceOnUse"><stop stop-color="#e7e9d6"/><stop offset="1" stop-color="#aab9a3"/></linearGradient>
+ <linearGradient id="mesh" x1="260" y1="350" x2="340" y2="535" gradientUnits="userSpaceOnUse"><stop stop-color="#34493e"/><stop offset="1" stop-color="#1a3028"/></linearGradient>
+ <linearGradient id="solar" x1="470" y1="75" x2="710" y2="160" gradientUnits="userSpaceOnUse"><stop stop-color="#426572"/><stop offset="1" stop-color="#233f49"/></linearGradient>
+ <pattern id="grid" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 0h12v12H0z" stroke="#b2c4a8" stroke-opacity=".24" stroke-width=".7"/></pattern>
+ <clipPath id="beltClip"><path d="m208 470 145 62 102-184-142-60z"/></clipPath>
+ <clipPath id="panelClip"><path d="m463 128 124 46 119-76-124-45z"/></clipPath>
+</defs>
+<ellipse cx="430" cy="481" rx="246" ry="60" transform="rotate(-25 430 481)" fill="#91a688" opacity=".15"/>
+<g stroke="#9bb195" stroke-width="1.2" opacity=".42"><path d="M133 523q-51 11-61-8m331 91q69-15 80-39M690 345q52-28 48-53M141 552q-40 9-54-3m332 75q59-12 79-32"/></g>
+<!-- The two buoyant hulls and their shaded lower faces. -->
+<path d="m119 442 17 44q12 27 45 14l344-211q23-14 17-36l-9-18-69 20z" fill="#183f34"/>
+<path d="M119 442q5-16 30-33l328-200q18-11 34 3l22 23q13 16-10 32L180 478q-25 15-39 1z" fill="url(#hull)" stroke="#1d4c3b" stroke-width="1.5"/>
+<path d="M141 442q8-13 20-20l322-195q9-5 16 1l13 13-343 210q-17 10-28-9z" fill="#a6bc91" opacity=".7"/>
+<path d="m356 535 17 37q12 27 43 10l337-211q21-14 11-37l-12-17-74 23z" fill="#15392e"/>
+<path d="M356 535q5-16 29-32l318-198q24-13 39 2l17 21q15 16-7 31L416 568q-28 15-44-5z" fill="url(#hull)" stroke="#1d4c3b" stroke-width="1.5"/>
+<path d="m378 534 328-211q14-10 24 0l8 10-332 213q-19 11-28-12z" fill="#b8c79e" opacity=".6"/>
+<g stroke="#142f27" stroke-width="7"><path d="m209 383 33 39m141-145 32 37m34 128 35 38m130-139 35 38"/></g>
+<!-- Lower frame: two longitudinal rails joined by cross members. -->
+<path d="m206 415 289-181 184 75-290 182z" fill="#8c9f89" stroke="#3d5c46" stroke-width="3"/>
+<path d="m223 416 272-168 167 63-275 169z" fill="#cbd6bd"/>
+<g stroke="#71816d" stroke-width="7"><path d="m242 410 159 64m-45-138 159 65m-38-140 161 64"/></g>
+<path d="m207 415 1 14 181 76 290-183v-13L389 491z" fill="#587361"/>
+<path d="m208 429 181 76v-14l-182-76z" fill="#294b39"/>
+<path d="m235 409 260-161m-103 229 263-163" stroke="#edf0df" stroke-width="3"/>
+<!-- Collector bin, rear of the deck. -->
+<path d="m451 267 144 56 95-59-143-54z" fill="#1d352b"/>
+<path d="m450 207 145 55v97l-145-56z" fill="#284638"/>
+<path d="m595 262 96-59v97l-96 59z" fill="#1e382e"/>
+<path d="m450 207 96-59 145 55-96 59z" fill="#536d50"/>
+<path d="m468 207 79-47 123 44-77 47z" fill="#152e25"/>
+<path d="m481 213 66-39 109 32-63 40z" fill="#1e382b"/>
+<path d="m450 207 145 55 96-59" stroke="#96ab83" stroke-width="4" stroke-linejoin="round"/>
+<g fill="#c9d4a0" opacity=".76"><path d="m502 208 15-7 16 9-14 7z"/><path d="m570 213 17-8 18 8-17 10z"/><ellipse cx="560" cy="219" rx="8" ry="3" transform="rotate(20 560 219)"/></g>
+<!-- Solar canopy and support struts. -->
+<g stroke="#75917b" stroke-width="5"><path d="M478 136v82m210-109v110m-106-39v91"/></g>
+<path d="m459 128 123-79 128 47v8l-123 79-128-47z" fill="#718d80"/>
+<path d="m463 128 124 46 119-76-124-45z" fill="url(#solar)" stroke="#a6b6a1" stroke-width="2"/>
+<g clip-path="url(#panelClip)" stroke="#a1b6b2" stroke-width="1" opacity=".7"><path d="m485 111 126 47m-100-64 127 48m-100-65 127 48m-101-65 127 48M487 139l119-76M513 148l119-76M538 157l119-76M563 166l119-76"/></g>
+<path d="m471 126 114 42 110-70" stroke="#d8e0c5" stroke-opacity=".45"/>
+<!-- Compact electronics enclosure and forward-looking camera. -->
+<path d="m371 289 54-34 63 24-55 36z" fill="url(#deck)" stroke="#627b61"/>
+<path d="m371 289 62 26v51l-62-26z" fill="#8fa58c"/>
+<path d="m433 315 55-36v51l-55 36z" fill="#506d56"/>
+<path d="m377 283 48-29 57 23-49 30z" fill="#e0e6d5" fill-opacity=".68" stroke="#cbd5bb" stroke-width="3"/>
+<path d="M423 257v-65" stroke="#263f31" stroke-width="4" stroke-linecap="round"/>
+<path d="m344 324 56 22v28l-56-21z" fill="#284d3a"/>
+<path d="m344 324 20-13 56 23-20 12z" fill="#59785a"/>
+<path d="m400 346 20-12v27l-20 13z" fill="#19392b"/>
+<g transform="translate(356 340) rotate(21)"><ellipse rx="7" ry="8" fill="#abc09c"/><ellipse rx="4" ry="5" fill="#1d302b"/><ellipse cx="23" rx="7" ry="8" fill="#abc09c"/><ellipse cx="23" rx="4" ry="5" fill="#1d302b"/></g>
+<!-- Inclined mesh conveyor and raised pickup cleats. -->
+<path d="m196 476 157 69 115-201-160-68z" fill="#132b23" stroke="#213f2c" stroke-width="3"/>
+<path d="m208 470 145 62 102-184-142-60z" fill="url(#mesh)"/>
+<g clip-path="url(#beltClip)"><path d="m208 470 145 62 102-184-142-60z" fill="url(#grid)"/><g stroke="#5d7760" stroke-width="5"><path d="m219 451 145 63m-133-84 145 63m-133-84 145 63m-134-84 144 63m-132-83 144 61m-133-82 144 61m-133-82 144 61"/></g><g stroke="#b5c38f" stroke-width="1.2" opacity=".55"><path d="m222 448 144 63m-131-85 144 63m-132-85 144 63m-132-85 144 63m-131-84 144 63m-132-85 144 63"/></g></g>
+<path d="m196 476 112-200 8 3-110 201z" fill="#809479"/>
+<path d="m353 545 115-201 8 3-115 204z" fill="#597253"/>
+<path d="m196 476 157 69 7 10-157-68z" fill="#7e9472"/>
+<path d="m308 276 160 68" stroke="#b0bea0" stroke-width="4"/>
+<g fill="#a9bb96" stroke="#314c35" stroke-width="2"><ellipse cx="201" cy="479" rx="8" ry="10" transform="rotate(25 201 479)"/><ellipse cx="357" cy="547" rx="8" ry="10" transform="rotate(25 357 547)"/></g>
+<!-- A bottle in the collector mouth communicates the project without implying a live feed. -->
+<g transform="translate(274 468) rotate(24)"><path d="M-9-25h18l3 9 5 8v32q0 7-17 7t-17-7V-8l5-8z" fill="#dde6cd" fill-opacity=".75" stroke="#acbd9f" stroke-width="1.5"/><rect x="-8" y="-31" width="16" height="8" rx="2" fill="#73995d"/><path d="M-16 3h32v14h-32z" fill="#a9c38a"/><path d="M-7-16v12m-3 26 2 4" stroke="#f4f6e6" stroke-width="2" opacity=".8"/></g>
+<!-- Motor pods at the stern. -->
+<g fill="#1d3b2c" stroke="#527652" stroke-width="2"><ellipse cx="526" cy="273" rx="13" ry="17" transform="rotate(31 526 273)"/><ellipse cx="749" cy="366" rx="13" ry="17" transform="rotate(31 749 366)"/></g>
+<g stroke="#a7be8f" stroke-width="2"><path d="m518 270 13 7m-8-13-3 17m222 81 13 7m-8-13-3 17"/></g>
+<g fill="#d7dfc0"><circle cx="236" cy="420" r="2"/><circle cx="390" cy="483" r="2"/><circle cx="656" cy="313" r="2"/><circle cx="494" cy="250" r="2"/></g>
+</svg>

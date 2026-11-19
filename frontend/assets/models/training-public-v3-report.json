@@ -1,0 +1,64 @@
+{
+  "schema": "warirak.training-outcome.v1",
+  "created_at": "2026-10-28T02:43:12.493314+00:00",
+  "outcome": "retained_baseline",
+  "published_release": "public-v2-2026-10-27",
+  "candidate_release": "public-v3-not-published",
+  "actual_epochs_completed": 25,
+  "epochs_planned": 35,
+  "early_stopping_patience": 12,
+  "best_training_checkpoint_epoch": 13,
+  "dataset_images": 1715,
+  "dataset_counts": {
+    "train": 1426,
+    "val": 147,
+    "test": 142
+  },
+  "additional_images": 390,
+  "source_revision": "54c57570586ac6caf2783a8617cd390c0f7640b8",
+  "selection": {
+    "protocol": {
+      "schema": "warirak.incremental-protocol.v1",
+      "frozen_before_training": true,
+      "base_weights_sha256": "dd61b6697fd4f5d97e8df4be7a611c44ea72e292cb16893688ea2083a7a94db8",
+      "dataset_manifest_sha256": "9faac846e5f36f93d7a25a4769f88ab7eaca63fdc63563d354aeda4dceaf17ca",
+      "imgsz": 800,
+      "rect": false,
+      "candidate": "best validation checkpoint from one fixed refinement recipe",
+      "selection_split": "val",
+      "selection_criterion": "mAP50-95 improves by at least0.003; neither class falls by more than0.02 mAP50-95",
+      "test_used_for_selection": false,
+      "test_is_historical": true,
+      "fresh_independent_test_available": false,
+      "field_validated": false
+    },
+    "baseline_map50_95": 0.3831831529280695,
+    "candidate_map50_95": 0.3722857470420239,
+    "baseline_classes": {
+      "plastic_bottle": 0.3715981462239365,
+      "bottle_cap": 0.3947681596322025
+    },
+    "candidate_classes": {
+      "plastic_bottle": 0.3908833682942771,
+      "bottle_cap": 0.3536881257897707
+    },
+    "promote": false,
+    "test_used_for_selection": false
+  },
+  "selection_split": "val",
+  "test_used_for_selection": false,
+  "historical_test_evaluated_in_this_run": false,
+  "fresh_independent_test_available": false,
+  "boat_camera_validated": false,
+  "real_world_validated": false,
+  "ncnn_export_required": false,
+  "weights_published_unchanged_sha256": "dd61b6697fd4f5d97e8df4be7a611c44ea72e292cb16893688ea2083a7a94db8",
+  "candidate_weights_sha256": "42ca13cc46d0025f11a57f30d79b50f041f4080e6e78af5fe5395ab0cb6aa320",
+  "dataset_manifest_sha256": "9faac846e5f36f93d7a25a4769f88ab7eaca63fdc63563d354aeda4dceaf17ca",
+  "limitations": [
+    "Public data only; no boat-camera images",
+    "Source capture-session groups are inferred",
+    "Existing test is historical and already exposed; it was not rerun for this rejected candidate",
+    "234 negative images are under15% of1715images;49boxes have a side smaller than8pixels"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "warirak.mission-sim-contract.v1",
+  "environment": "warirak-pool-mission-v4-dev",
+  "source": "simulation",
+  "development_only": true,
+  "training_started": false,
+  "training_protocol_frozen": false,
+  "production_runtime_supported": false,
+  "control_enabled": false,
+  "observation_schema": "warirak.mission-sim-observation.v1",
+  "request_schema": "warirak.mission-sim-request.v1",
+  "actions": ["STOP", "FORWARD", "TURN_LEFT", "TURN_RIGHT", "PIVOT_LEFT", "PIVOT_RIGHT", "HOLD", "RECOVERY_REQUEST"],
+  "state_contract": {
+    "kind": "structured continuous observations; no Q-table encoder or trained policy yet",
+    "pose": "explicit simulation_truth pool-fixed x/y metres and heading radians; confidence/uncertainty/time; not existing boat hardware",
+    "motion": "finite difference of simulated world displacement plus declared noise; m/s and rad/s; never derived by converting requested motor values",
+    "clearance": "eight synthetic body-relative rays at front, front-left, left, rear-left, rear, rear-right, right, front-right; metres",
+    "feedback": "simulation digital applied-control ACK; own control_sequence distinct from mission request sequence; not mechanical thrust proof",
+    "target": "synthetic bearing/range with legacy noise/dropout, not YOLO depth or physical camera",
+    "mode": "STOP/WATCHDOG_STOP/TRACKING/HOLD/HOLD_UNAVAILABLE/RECOVERY_REQUIRED/ACTUATION_UNAVAILABLE/FAULT_STOP/MANUAL_OVERRIDE/DISARMED"
+  },
+  "physics": {
+    "scene_generator": "frozen MemoryPoolEnv static geometry, gains and current distribution; never call its step or modify its files",
+    "dt_seconds": 0.1,
+    "horizon_steps": 960,
+    "surge_time_constant_seconds": 0.35,
+    "surge_update": "u += (desired-u)*(1-exp(-dt/tau)); desired=(left*leftGain+right*rightGain)/2 unless simulated jam",
+    "yaw_update": "heading += (right*rightGain-left*leftGain)/0.4*dt unless simulated jam",
+    "position_update": "position += (heading_vector*u + passive_current)*dt in every mode, including STOP/manual/disarmed",
+    "stress_current_component_max_abs_mps": 0.08,
+    "stress_gain_range": [0.8,1.2],
+    "latency_ticks": "legacy delay0..2 multiplied by3; 0/300/600ms retained at100ms dt",
+    "collisions": "same circle/wall geometry; remain possible under every mode; STOP and HOLD confer no immunity",
+    "collection": "only TRACKING with forward hull speed>0.15m/s, distance<0.5m and forward bearing<0.58rad; simulated only"
+  },
+  "observations": {
+    "legacy_stress_retained": "clearance noise +/-0.1m, sensor dropout2%, target dropout8%, bearing noise +/-0.16rad, range noise +/-0.25m",
+    "added_synthetic_stress_pose_noise_m": 0.02,
+    "added_synthetic_stress_velocity_noise_mps": 0.008,
+    "added_synthetic_stress_heading_noise_rad": 0.025,
+    "hardware_calibrated": false
+  },
+  "supervision": {
+    "request_ttl_max_ms": 400,
+    "feedback_timeout_ms": 500,
+    "sensor_evidence_max_age_ms": 300,
+    "critical_clearance_m": 0.35,
+    "moving_clearance_m": 0.65,
+    "hold_max_normalized_motor_abs": 0.25,
+    "hold_required_evidence": "fresh independently tagged pose+motion and all eight clearances>=0.65m; source/method/units/confidence/uncertainty checked",
+    "hold_algorithm": "bounded synthetic position/integral/velocity feedback with heading alignment; untrained, non-hardware-calibrated",
+    "stop_semantics": "immediate neutral motors and queue flush; passive current and hull coasting remain",
+    "manual_and_disarm": "always neutral, clear pending mission/controls/anchor; old autonomous request cannot return",
+    "watchdog": "no new live mission request means neutral and cleared queue; never retime the old request",
+    "receiver": "recheck queued command expiry and direction clearance at application; delayed startup neutral",
+    "actuation_unavailable": "missing/mismatched ACK or expired queued command latches assistance; cannot extend TTL to hide latency",
+    "recovery": "only a neutral manual-assessment request, no autonomous unjamming/reverse escape controller",
+    "possible_stall": "distinct fresh measured low-speed samples >=2s with matched forward-command ACK; excludes HOLD and pivots; does not identify all jams in flowing water",
+    "reset": "explicit fresh disarmed operator reset; previous mission not restored"
+  },
+  "canonical_cases": {
+    "role": "development/unit cases, not independent validation or test",
+    "fixtures_may_isolate_noise_or_obstacles": true,
+    "fixture_parameters_are_recorded": true,
+    "benchmark_may_use_fixtures": false,
+    "performance_claims_allowed": false
+  },
+  "required_before_training": [
+    "Freeze learner state/action encoding and explicit model schema; current environment has no learned policy",
+    "Freeze train/validation/test seeds that do not reuse exposed v3 test seeds; do not open test for selection",
+    "Freeze absolute collision/success/availability/timeout gates in addition to comparative gates",
+    "Give baseline and candidate the same physics, sensors and HOLD/RECOVERY supervisor; report extra observability separately from learning gains",
+    "Include noisy nominal/stress, latency expiry, missing rear/pose/motion/ACK, manual/disarm/watchdog cases without reducing difficulty",
+    "Record source hashes, hypothesis and bounded compute plan before any experiment",
+    "Any research candidate still requires readiness review; no production or physical rollout from canonical tests"
+  ]
+}

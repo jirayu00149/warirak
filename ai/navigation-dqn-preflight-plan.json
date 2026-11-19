@@ -1,0 +1,29 @@
+{
+  "schema": "warirak.navigation-dqn-preflight-plan.v1",
+  "scope": "New learner/checkpoint and persistent JSONL forward-pass SOFTWARE preflight only. Synthetic vectors/rewards and bounded unit gradient updates; no plant/policy trial or real training dataset.",
+  "hypothesis": "The fixed history representation can feed a compact masked Double-DQN learner whose permitted action targets, bounded replay and optimizer/RNG state survive exact CPU resume.",
+  "recipe": "ai/navigation-dqn-recipe.json",
+  "architecture": [234,64,64,7],
+  "parameters": 19655,
+  "dtype": "float32 CPU after verifying canonical binary64 vector digest",
+  "reward": "Only synthetic unit numbers in this preflight. Future bridge must compute unchanged R2 reward including post-assistance collisions; not implemented or measured by these checks.",
+  "sampling_and_exploration": "Private CPU Torch generator for replay; private Python RNG for epsilon. No stochastic model layers. Caller global RNG must not advance.",
+  "terminal_rule": "Only collision, collection or full time limit ends bootstrap. Assistance, epoch change, manual/disarm/cancel do not end physics or erase rewards; next epoch features must be cleared.",
+  "checkpoint_scope": "Learner online/target/Adam/replay ring/private RNGs/counters plus explicit between-episode cursor. Not mid-episode Node plant/RNG restoration. Load CPU weights_only=True with trusted expected file hash and exact runtime/protocol/recipe/layout identity.",
+  "stream_scope": "One bounded local Python process, maximum32 JSONL messages, original simulation clock/session/record/deadline, fail closed on duplicate/regression. Randomly initialized forward model only; forbidden-by-default validation-fixture reply schema; zero optimizer updates in stream.",
+  "test_recipe": {
+    "python": "tests/test_navigation_dqn.py",
+    "python_minimum_passed": 18,
+    "node": "tests/navigation-dqn-stream.test.mjs",
+    "node_minimum_passed": 4,
+    "inputs": "tests/fixtures/navigation-dqn-vectors.json generated from hand-defined synthetic sensor/stream rows; no plant steps, trajectories, labels or datasets",
+    "bounded_updates": "At most15 actual synthetic optimizer steps across all unit tests; target-sync edge uses an explicit artificial unit counter rather than250 extra updates.",
+    "checks": ["Permitted online argmax plus target value, not unmasked max", "Terminal no bootstrap; nonterminal empty mask rejected", "No operator request or expired reply", "Consecutive original100ms records and cleared history at epoch transition", "Ring bounded8192 and owns copies", "Finite gradient, stale/periodic target behavior", "Caller RNG unaffected", "Bit-exact file resume of three subsequent actions/samples/losses/tensors/Adam slots", "Malformed identity/runtime/optimizer/hash/pending checkpoint rejected", "Persistent original-time Node/Python wire forward passes and cancelled/expired/duplicate proposals"]
+  },
+  "gate": "All18Python+4Node checks pass and upstream hashes unchanged. Approves only episode driver/reward/boundary/seed/budget protocol design before actual training; not automatic training, deployment or field use.",
+  "actual_training_started": false,
+  "plant_rollout_started": false,
+  "validation_partition_opened": false,
+  "test_partition_opened": false,
+  "physical_motor_transport": false
+}

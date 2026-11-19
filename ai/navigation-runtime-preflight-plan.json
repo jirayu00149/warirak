@@ -1,0 +1,42 @@
+{
+  "schema": "warirak.navigation-runtime-preflight-plan.v1",
+  "execution_scope": "software_preflight",
+  "scope": "Full local Node/Python actor/step/credit/commit/restore RPC SOFTWARE integration. Two new analytic bank fixtures, not a policy performance experiment. No actual project training/held-out data/deployment.",
+  "runtime_config": {
+    "schema": "warirak.navigation-runtime-config.v1",
+    "scene_seed": 11500,
+    "episodes": 2,
+    "model_seed": 73,
+    "profiles": ["stress"],
+    "fixture_policy": "analytic_bank_four_steps",
+    "max_steps": 960,
+    "update_every_credits": 4,
+    "epsilon_start": 0.4,
+    "epsilon_floor": 0.04,
+    "epsilon_decay_choices": 100000,
+    "minimum_free_disk_mib": 512,
+    "snapshot_episodes": [1,2],
+    "software_waits": [{"episode_index":0,"step":1}],
+    "software_faults": [{"episode_index":0,"step":1,"cancel_recording":true}],
+    "physical_motor_transport": false
+  },
+  "protocol_guards": ["Hash all runtime dependencies before any model/world work", "Actual research scope requires a separately frozen complete training/validation/test/selection protocol and reviewed runtime audit", "One healthy Python owner per store; duplicate cannot initialize/load", "Sequential bounded strict JSONL with original request/vector/model/session/record/clock bindings", "Synchronous virtual compute is not physical inference latency/PiFPS", "Declared0/300/600ms actuator transport in original R2 retained, no substitution by inference clock"],
+  "learning_schedule": "Epsilon is derived solely from restored model.choices(proposals). Updates every4accepted actual-request duration credits using restored replay.total_added, with existing256credit warmup. Declare this decision-record cadence separately from100ms physical steps. Software end-to-end episodes stay below warmup; one synthetic helper gradient tests crossing256.",
+  "accounting": "Rebuild expected duration credits from every accepted physical ledger, including null waits, raw reward, original identity and natural terminal. Never invent STOP, skip a failed seed, discard passive prefix, or infer measured velocity from motor commands.",
+  "commit_snapshots": "Journaled store keeps every result+manifest receipt; current cursor selects complete generation. Immutable configured snapshots survive checkpoint pruning, max4snapshots and disk reserve. Interrupted uncommitted seed starts from committed model/replay/RNG/cursor in a new Python process. No mid-episode world restore claim.",
+  "tests": {
+    "python_target": "tests/test_navigation_runtime.py",
+    "python_minimum_passed": 5,
+    "node_target": "tests/navigation-runtime.test.mjs",
+    "node_minimum_passed": 4,
+    "python_scope": "Five core guards/cadence checks; at most one synthetic optimizer update. No R2 stepping.",
+    "node_scope": "One two-episode end-to-end, one paired uninterrupted/interrupted+resumed two-episode comparison, one intentionally malformed one-step ledger, one duplicate-owner guard. Seeds11500/11501 are new software fixtures. Generated current/noise/dropout/gains/actuator delay remain; no performance-rate claim.",
+    "interruption": "Graceful explicit abort after6physical steps, following one committed4step episode and2uncommitted steps. New process restores seed11501 and exact final learner state/choices/replay/Adam/RNG/cursor against uninterrupted execution. Not OS kill/power-loss durability.",
+    "storage": "Temporary roots resolved as navigation-runtime-unit-* or navigation-runtime-core-unit-* direct children of workspace/work before recursive cleanup. Bound stdout/stderr/RPC/messages/checkpoints/snapshots/journal; do not retain unit checkpoints as trained models."
+  },
+  "gate": "All5Python+4Node checks pass with frozen upstream hashes, then review for a separate actual-training protocol. Actual training is NOT launched by this plan. No automatic validation/test opening or deployment.",
+  "actual_training_started": false,
+  "validation_partition_opened": false,
+  "test_partition_opened": false,
+  "physical_motor_transport": false
+}

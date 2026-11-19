@@ -1,0 +1,39 @@
+{
+  "schema":"warirak.mission-experiment-protocol.v1",
+  "environment":"warirak-pool-mission-v4r2-dev",
+  "model_schema":"warirak.mission-q-policy.v1",
+  "hypothesis":"A bounded sparse Q learner with explicit neutral STOP/HOLD, measured motion category, evidence state and previous requested action can improve collection over fixed legacy and HOLD-capable rule baselines under the same R2 plant/sensors/supervisors.",
+  "training":{"episodes":6000,"seed":24000000,"alpha":0.05,"gamma":0.985,"epsilon_floor":0.04,"epsilon_start":0.4},
+  "training_profile_mix":"25%nominal/75%stress by absolute episode index",
+  "candidates":[2000,6000],
+  "candidate_recipe":"Two snapshots of ONE6000episode trajectory; epsilon decay uses6000 for both; no independent repeated training or automatic extension",
+  "checkpoint_every_episodes":100,
+  "validation":{"nominal_seed":26000000,"stress_seed":26500000,"episodes_per_profile":200},
+  "test":{"nominal_seed":28000000,"stress_seed":28500000,"episodes_per_profile":400},
+  "selection_split":"validation",
+  "test_used_for_selection":false,
+  "test_requires_explicit_engineering_review":true,
+  "baselines":["legacy_mapped","rules_with_hold"],
+  "baseline_comparison":"For success use the higher validation reference rate; for collision use the lower reference rate. Both baseline adapters and learner share the observation-only action mask, R2 plant, all added simulated sensors, HOLD feedback and guards.",
+  "gates":{
+    "research":{
+      "nominal":{"min_success":0.60,"max_collision":0.15,"max_timeout":0.35,"max_assistance":0.35,"max_hard_unavailable":0.10,"max_range_wait_fraction":0.15},
+      "stress":{"min_success":0.35,"max_collision":0.40,"max_timeout":0.60,"max_assistance":0.65,"max_hard_unavailable":0.50,"max_range_wait_fraction":0.15}
+    },
+    "min_stress_success_gain":0.02,
+    "max_nominal_success_drop":0.01,
+    "max_collision_increase":0.005,
+    "interpretation":"Research comparison only, not a safe-operation or deployment threshold. Includes600ms transport-delay cases that cannot meet400ms command lifetime.",
+    "readiness":{"min_success_each_profile":0.85,"max_collision_each_profile":0.01,"max_hard_unavailable_each_profile":0.05,"compatible_runtime_required":true,"hardware_calibration_required_for_physical_control":true}
+  },
+  "tie_break":"stress_success -2*stress_collision -0.25*stress_hard_unavailable; then nominal success; then nominal mean steps",
+  "rollout":"Run to actual collision/collection/960step timeout. Assistance is NOT early episode termination; passive current continues. All fault/unavailability/timeout cases remain in denominators.",
+  "reward":"Training-only world-distance potential3*(before-after), -0.015/step, +40collection, -30collision, -10first assistance. Reward truth is not exposed to controller features.",
+  "features":{"schema":"warirak.mission-features.v1","radices":[17,3,9,3,5,4,8],"state_count":220320,"order":["target bearing/unseen","range bin","front mask/invalid","HOLD readiness/near surround","mission mode/evidence","independent heading-projected velocity/unknown","previous REQUESTED action"],"coordinates_exposed_to_q_learner":false,"action_count":8,"q_storage":"sparse visited rows; missing rows use frozen rules; no giant dense table"},
+  "prior_test_exposure":"memory-v3 test16m/16.5m and old detector tests were exposed; this experiment uses new seeds and never uses detector test scores",
+  "field_validated":false,
+  "production_runtime_supported":false,
+  "control_enabled":false,
+  "compute":"one bounded local CPU Node process; no paid service; checkpoint+resume with source/protocol hash checks",
+  "failure_policy":"Retain published detector/public5action policy if no research candidate passes. Do not add epochs, weaken guards, remove current or exclude difficult seeds. A research pass ends at candidate_ready_for_review with test still closed."
+}

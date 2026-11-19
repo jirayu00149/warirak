@@ -1,0 +1,241 @@
+{
+  "schema": "warirak.camera-training-report.v1",
+  "run_id": "public-yolo26n-camera-v5",
+  "created_at": "2026-11-14T06:48:26.758124+00:00",
+  "status": "retained_baseline",
+  "epochs_completed": 6,
+  "published_release": "public-v4-2026-10-28",
+  "selection": {
+    "baseline_map50_95": 0.3907725407444323,
+    "candidate_map50_95": 0.3360321674189227,
+    "baseline_classes": {
+      "plastic_bottle": 0.39197459191001405,
+      "bottle_cap": 0.3895704895788506
+    },
+    "candidate_classes": {
+      "plastic_bottle": 0.32240899516065824,
+      "bottle_cap": 0.34965533967718715
+    },
+    "promote": false,
+    "selection_split": "val",
+    "test_used_for_selection": false
+  },
+  "protocol": {
+    "schema": "warirak.camera-training-protocol.v1",
+    "frozen_before_training": true,
+    "base_weights_sha256": "70c0206ea2fbd161bf86d205166b3416dd2f6db198fd87bf98079e8b50425a89",
+    "dataset_manifest_sha256": "9faac846e5f36f93d7a25a4769f88ab7eaca63fdc63563d354aeda4dceaf17ca",
+    "recipe": {
+      "imgsz": 640,
+      "batch": 8,
+      "epochs": 6,
+      "optimizer": "AdamW",
+      "lr0": 8e-05,
+      "cls_pw": 0.5,
+      "seed": 143,
+      "patience": 6,
+      "cos_lr": true,
+      "close_mosaic": 2,
+      "mosaic": 0.15,
+      "scale": 0.4,
+      "hsv_s": 0.45,
+      "hsv_v": 0.3,
+      "fliplr": 0.5,
+      "flipud": 0.0,
+      "degrees": 5.0,
+      "mixup": 0.0,
+      "workers": 0,
+      "cache": false,
+      "deterministic": true,
+      "save_period": -1,
+      "amp": true
+    },
+    "baseline_imgsz": 800,
+    "candidate_imgsz": 640,
+    "rect": false,
+    "selection_split": "val",
+    "min_macro_gain": 0.003,
+    "max_class_drop": 0.02,
+    "validation_previously_exposed": true,
+    "test_previously_exposed": true,
+    "test_used_for_selection": false,
+    "test_opened_this_run": false,
+    "field_validated": false,
+    "hypothesis": "Adapt the existing public-data detector to 640px camera inference. Promote only if it also exceeds the current 800px validation baseline; speed is not assumed or used to excuse lost accuracy.",
+    "data_sources": [
+      "https://github.com/pedropro/TACO",
+      "https://huggingface.co/datasets/OliviaWuYJ/sc-floatwaste",
+      "https://huggingface.co/datasets/roboticslaburjc/ExtendedTACO-reviewed"
+    ]
+  },
+  "dataset_audit": {
+    "valid": true,
+    "errors": [],
+    "warnings": [
+      "Few negative images; include empty water, waves, reflections and leaves",
+      "49 boxes are smaller than eight pixels on at least one side"
+    ],
+    "images": 1715,
+    "groups": 954,
+    "counts": {
+      "train": 1426,
+      "val": 147,
+      "test": 142
+    },
+    "instances": {
+      "train": [
+        1413,
+        746
+      ],
+      "val": [
+        88,
+        40
+      ],
+      "test": [
+        98,
+        37
+      ]
+    },
+    "negative_images": 234
+  },
+  "provenance": {
+    "sources": {
+      "taco": {
+        "repository": "https://huggingface.co/datasets/pictograph/taco",
+        "revision": "1b9f8ec6a3383959fdf54f8388996dd5dd68c935",
+        "license": "CC BY 4.0; see source image licence where specified"
+      },
+      "water": {
+        "repository": "https://huggingface.co/datasets/OliviaWuYJ/sc-floatwaste",
+        "revision": "1e45b63020f811f07c158e3d63cdb9a4d5da649b",
+        "license": "CC BY 4.0; see source image licence where specified"
+      },
+      "extended_taco_reviewed": {
+        "repository": "https://huggingface.co/datasets/roboticslaburjc/ExtendedTACO-reviewed",
+        "revision": "54c57570586ac6caf2783a8617cd390c0f7640b8",
+        "licence": "Annotations CC BY 4.0; images follow individual licences, CC BY 4.0 when unspecified"
+      }
+    },
+    "official_taco_annotation_sha256": "812c2e3f0d336b437f276597715de2abb08bb8a641599c45f593d233ec66457b",
+    "created_at": "2026-10-27T14:26:35.991358+00:00",
+    "transforms": [
+      "source dimension verification",
+      "long edge capped at 1280 preserving aspect ratio",
+      "EXIF stripped in annotation coordinate system",
+      "JPEG quality 93"
+    ],
+    "label_mapping": {
+      "TACO": {
+        "plastic_bottle": [
+          4,
+          5
+        ],
+        "bottle_cap": [
+          7,
+          8
+        ]
+      },
+      "SC-FloatWaste": {
+        "plastic_bottle": [
+          12,
+          13
+        ],
+        "excluded_ambiguous_lid": 16
+      }
+    },
+    "limitations": [
+      "Public datasets are not a calibrated boat-camera field dataset",
+      "Water-domain caps are not independently labelled in SC-FloatWaste; ambiguous lid-containing frames excluded",
+      "Capture groups inferred from source batches and sequence names; near duplicates grouped conservatively"
+    ],
+    "train_only_augmentation": {
+      "target": "plastic_bottle",
+      "new_images": 390,
+      "validation_and_test_unchanged": true,
+      "held_out_scene_filter": "pHash <=18 and thumbnail MSE <0.035 with similar aspect ratio",
+      "known_training_duplicate_filter": "pHash <=8 and thumbnail MSE <0.018 with similar aspect ratio",
+      "limitation": "Additional source lacks capture-session metadata; similarity checks reduce but cannot prove absence of all related scenes"
+    },
+    "augmentation_history": [
+      {
+        "new_images": 415,
+        "validation_and_test_unchanged": true,
+        "held_out_scene_filter": "pHash <=18 and thumbnail MSE <0.035 with similar aspect ratio",
+        "known_training_duplicate_filter": "pHash <=8 and thumbnail MSE <0.018 with similar aspect ratio",
+        "limitation": "Additional source lacks capture-session metadata; similarity checks reduce but cannot prove absence of all related scenes"
+      }
+    ]
+  },
+  "baseline": {
+    "map50": 0.5163292304786621,
+    "map50_95": 0.3907725407444323,
+    "classes": {
+      "plastic_bottle": 0.39197459191001405,
+      "bottle_cap": 0.3895704895788506
+    },
+    "calibration": {
+      "schema": "warirak.confidence-calibration.v1",
+      "selection_split": "val",
+      "method": "maximum smoothed per-class validation F1; confidence bounded to 0.05–0.95",
+      "thresholds": {
+        "plastic_bottle": 0.45945945945945943,
+        "bottle_cap": 0.23923923923923923
+      }
+    },
+    "operating_points": {
+      "plastic_bottle": {
+        "precision": 0.579881435494139,
+        "recall": 0.6022727272727273,
+        "confidence_threshold": 0.45945945945945943
+      },
+      "bottle_cap": {
+        "precision": 0.5706017769271127,
+        "recall": 0.575,
+        "confidence_threshold": 0.23923923923923923
+      }
+    }
+  },
+  "candidate": {
+    "map50": 0.48102010941484974,
+    "map50_95": 0.3360321674189227,
+    "classes": {
+      "plastic_bottle": 0.32240899516065824,
+      "bottle_cap": 0.34965533967718715
+    },
+    "calibration": {
+      "schema": "warirak.confidence-calibration.v1",
+      "selection_split": "val",
+      "method": "maximum smoothed per-class validation F1; confidence bounded to 0.05–0.95",
+      "thresholds": {
+        "plastic_bottle": 0.5035035035035035,
+        "bottle_cap": 0.3533533533533533
+      }
+    },
+    "operating_points": {
+      "plastic_bottle": {
+        "precision": 0.5433647341211925,
+        "recall": 0.5409092058045027,
+        "confidence_threshold": 0.5035035035035035
+      },
+      "bottle_cap": {
+        "precision": 0.610030503994899,
+        "recall": 0.525,
+        "confidence_threshold": 0.3533533533533533
+      }
+    }
+  },
+  "candidate_sha256": "18711ea5dd816512b8f36663dd86fbc424fe1c99a772bd63a982dc04360fea9c",
+  "training_duration_seconds": 367.267,
+  "validation_previously_exposed": true,
+  "test_previously_exposed": true,
+  "test_opened_this_run": false,
+  "field_validated": false,
+  "ncnn_exported": false,
+  "reason": "Candidate failed validation gate. Production NCNN and calibration remain public-v4.",
+  "limitations": [
+    "Validation reused across experiments; not independent field accuracy",
+    "No images from the actual boat camera",
+    "Public water dataset lacks independently labelled bottle caps",
+    "Inference FPS on the user Raspberry Pi not measured this run"
+  ]
+}

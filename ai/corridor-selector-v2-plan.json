@@ -1,0 +1,601 @@
+{
+  "schema": "warirak.corridor-selector-development-plan.v1",
+  "role": "One fixed untrained conditional-ranking extension in NEW paired development fixtures, not validation/test/field accuracy",
+  "selector_schema": "warirak.proactive-request-selector.v2",
+  "proposal_schema": "warirak.proactive-request-proposal.v2",
+  "hypothesis": "When v1 declines pivot/HOLD but original FORWARD is still permitted, three distinct fresh front-corridor/motion observations may support a conditional request ranking. A finite lateral circle and an extended wall are contrasting fixtures, not geometry classes the policy knows.",
+  "constants": {
+    "required_frames": 3,
+    "min_span_ms": 200,
+    "max_span_ms": 300,
+    "max_gap_ms": 150,
+    "simulated_range_noise_allowance_m": 0.1,
+    "min_front_lower_m": 1,
+    "min_other_side_lower_m": 0.65,
+    "max_abs_yaw_rate_rps": 0.35,
+    "max_forward_speed_mps": 0.9,
+    "max_abs_lateral_speed_mps": 0.15,
+    "min_side_approach_mps": 0.01,
+    "max_target_bearing_rad": 0.35
+  },
+  "base_selector_unchanged": true,
+  "reference": "Frozen selector-v1 logic with repaired sidecar-v2; candidate uses the SAME sidecar-v2, R2 sensors/mask/plant/guards and common operator/stream overrides",
+  "profile": "stress",
+  "cases": [
+    {
+      "id": "left_finite",
+      "pair_id": "left",
+      "geometry": "finite",
+      "seed": 37000000,
+      "fixture": {
+        "x": 4.2,
+        "y": 3,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 3,
+          "class_id": 0
+        },
+        "obstacles": [
+          {
+            "x": 4.2,
+            "y": 4.09,
+            "r": 0.35
+          }
+        ],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 0
+      }
+    },
+    {
+      "id": "left_wall",
+      "pair_id": "left",
+      "geometry": "wall",
+      "seed": 37000000,
+      "fixture": {
+        "x": 4.2,
+        "y": 5.26,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 5.26,
+          "class_id": 0
+        },
+        "obstacles": [],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 0
+      }
+    },
+    {
+      "id": "right_finite",
+      "pair_id": "right",
+      "geometry": "finite",
+      "seed": 37000001,
+      "fixture": {
+        "x": 4.2,
+        "y": 3,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 3,
+          "class_id": 0
+        },
+        "obstacles": [
+          {
+            "x": 4.2,
+            "y": 1.91,
+            "r": 0.35
+          }
+        ],
+        "drift": {
+          "x": 0,
+          "y": -0.08
+        },
+        "delayTicks": 0
+      }
+    },
+    {
+      "id": "right_wall",
+      "pair_id": "right",
+      "geometry": "wall",
+      "seed": 37000001,
+      "fixture": {
+        "x": 4.2,
+        "y": 0.74,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 0.74,
+          "class_id": 0
+        },
+        "obstacles": [],
+        "drift": {
+          "x": 0,
+          "y": -0.08
+        },
+        "delayTicks": 0
+      }
+    },
+    {
+      "id": "closer_left_finite",
+      "pair_id": "closer_left",
+      "geometry": "finite",
+      "seed": 37000002,
+      "fixture": {
+        "x": 4.2,
+        "y": 3,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 3,
+          "class_id": 0
+        },
+        "obstacles": [
+          {
+            "x": 4.2,
+            "y": 3.99,
+            "r": 0.35
+          }
+        ],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 0
+      }
+    },
+    {
+      "id": "closer_left_wall",
+      "pair_id": "closer_left",
+      "geometry": "wall",
+      "seed": 37000002,
+      "fixture": {
+        "x": 4.2,
+        "y": 5.359999999999999,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 5.359999999999999,
+          "class_id": 0
+        },
+        "obstacles": [],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 0
+      }
+    },
+    {
+      "id": "latency300_finite",
+      "pair_id": "latency300",
+      "geometry": "finite",
+      "seed": 37000003,
+      "fixture": {
+        "x": 4.2,
+        "y": 3,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 3,
+          "class_id": 0
+        },
+        "obstacles": [
+          {
+            "x": 4.2,
+            "y": 4.140000000000001,
+            "r": 0.35
+          }
+        ],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 3
+      }
+    },
+    {
+      "id": "latency300_wall",
+      "pair_id": "latency300",
+      "geometry": "wall",
+      "seed": 37000003,
+      "fixture": {
+        "x": 4.2,
+        "y": 5.21,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 5.21,
+          "class_id": 0
+        },
+        "obstacles": [],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 3
+      }
+    },
+    {
+      "id": "latency600_finite",
+      "pair_id": "latency600",
+      "geometry": "finite",
+      "seed": 37000004,
+      "fixture": {
+        "x": 4.2,
+        "y": 3,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 3,
+          "class_id": 0
+        },
+        "obstacles": [
+          {
+            "x": 4.2,
+            "y": 4.09,
+            "r": 0.35
+          }
+        ],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 6
+      }
+    },
+    {
+      "id": "latency600_wall",
+      "pair_id": "latency600",
+      "geometry": "wall",
+      "seed": 37000004,
+      "fixture": {
+        "x": 4.2,
+        "y": 5.26,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 5.26,
+          "class_id": 0
+        },
+        "obstacles": [],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 6
+      }
+    },
+    {
+      "id": "range_gap_finite",
+      "pair_id": "range_gap",
+      "geometry": "finite",
+      "seed": 37000005,
+      "fixture": {
+        "x": 4.2,
+        "y": 3,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 3,
+          "class_id": 0
+        },
+        "obstacles": [
+          {
+            "x": 4.2,
+            "y": 4.09,
+            "r": 0.35
+          }
+        ],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 0
+      },
+      "fault": "range_gap"
+    },
+    {
+      "id": "range_gap_wall",
+      "pair_id": "range_gap",
+      "geometry": "wall",
+      "seed": 37000005,
+      "fixture": {
+        "x": 4.2,
+        "y": 5.26,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 5.26,
+          "class_id": 0
+        },
+        "obstacles": [],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 0
+      },
+      "fault": "range_gap"
+    },
+    {
+      "id": "motion_gap_finite",
+      "pair_id": "motion_gap",
+      "geometry": "finite",
+      "seed": 37000006,
+      "fixture": {
+        "x": 4.2,
+        "y": 3,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 3,
+          "class_id": 0
+        },
+        "obstacles": [
+          {
+            "x": 4.2,
+            "y": 1.91,
+            "r": 0.35
+          }
+        ],
+        "drift": {
+          "x": 0,
+          "y": -0.08
+        },
+        "delayTicks": 0
+      },
+      "fault": "motion_gap"
+    },
+    {
+      "id": "motion_gap_wall",
+      "pair_id": "motion_gap",
+      "geometry": "wall",
+      "seed": 37000006,
+      "fixture": {
+        "x": 4.2,
+        "y": 0.74,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 0.74,
+          "class_id": 0
+        },
+        "obstacles": [],
+        "drift": {
+          "x": 0,
+          "y": -0.08
+        },
+        "delayTicks": 0
+      },
+      "fault": "motion_gap"
+    },
+    {
+      "id": "operator_finite",
+      "pair_id": "operator",
+      "geometry": "finite",
+      "seed": 37000007,
+      "fixture": {
+        "x": 4.2,
+        "y": 3,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 3,
+          "class_id": 0
+        },
+        "obstacles": [
+          {
+            "x": 4.2,
+            "y": 4.09,
+            "r": 0.35
+          }
+        ],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 0
+      },
+      "fault": "operator_schedule"
+    },
+    {
+      "id": "operator_wall",
+      "pair_id": "operator",
+      "geometry": "wall",
+      "seed": 37000007,
+      "fixture": {
+        "x": 4.2,
+        "y": 5.26,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 5.26,
+          "class_id": 0
+        },
+        "obstacles": [],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 0
+      },
+      "fault": "operator_schedule"
+    },
+    {
+      "id": "feedback_gap_finite",
+      "pair_id": "feedback_gap",
+      "geometry": "finite",
+      "seed": 37000008,
+      "fixture": {
+        "x": 4.2,
+        "y": 3,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 3,
+          "class_id": 0
+        },
+        "obstacles": [
+          {
+            "x": 4.2,
+            "y": 1.91,
+            "r": 0.35
+          }
+        ],
+        "drift": {
+          "x": 0,
+          "y": -0.08
+        },
+        "delayTicks": 0
+      },
+      "fault": "feedback_gap"
+    },
+    {
+      "id": "feedback_gap_wall",
+      "pair_id": "feedback_gap",
+      "geometry": "wall",
+      "seed": 37000008,
+      "fixture": {
+        "x": 4.2,
+        "y": 0.74,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 0.74,
+          "class_id": 0
+        },
+        "obstacles": [],
+        "drift": {
+          "x": 0,
+          "y": -0.08
+        },
+        "delayTicks": 0
+      },
+      "fault": "feedback_gap"
+    },
+    {
+      "id": "clock_fault_finite",
+      "pair_id": "clock_fault",
+      "geometry": "finite",
+      "seed": 37000009,
+      "fixture": {
+        "x": 4.2,
+        "y": 3,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 3,
+          "class_id": 0
+        },
+        "obstacles": [
+          {
+            "x": 4.2,
+            "y": 4.09,
+            "r": 0.35
+          }
+        ],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 0
+      },
+      "fault": "pose_clock_fault"
+    },
+    {
+      "id": "clock_fault_wall",
+      "pair_id": "clock_fault",
+      "geometry": "wall",
+      "seed": 37000009,
+      "fixture": {
+        "x": 4.2,
+        "y": 5.26,
+        "heading": 0,
+        "target": {
+          "x": 8.2,
+          "y": 5.26,
+          "class_id": 0
+        },
+        "obstacles": [],
+        "drift": {
+          "x": 0,
+          "y": 0.08
+        },
+        "delayTicks": 0
+      },
+      "fault": "pose_clock_fault"
+    }
+  ],
+  "pairing": "Each finite/wall pair shares one base seed and initial side clearance/current/delay; geometry and resulting observations differ. Ten base seeds, not twenty independent samples. No old14fixture rerun.",
+  "plant": "Unchanged R2 stress noise/dropouts/gains/inertia/960-step outcomes; only declared geometry/current/delay overrides. No sensor-noise or guard reduction.",
+  "fault_schedule": {
+    "range_gap": "range_packet_loss at steps20..24",
+    "motion_gap": "motion_dropout at20..45",
+    "feedback_gap": "feedback_loss at15..30",
+    "operator_schedule": "manual_override10..19,disarmed25..34,recording cancel at40 with explicit caller STOP40..49, fresh decisions resume50",
+    "pose_clock_fault": "At15 set original simulated pose timestamp to now+100; latch recorder fault, common override STOP/null thereafter; do not repair or censor tail",
+    "ack_mismatch": "At15 alter original simulated feedback request_sequence by1000; common observer ACK-integrity override STOP on the inconsistent report"
+  },
+  "common_overrides": "If recorder faults or observed ACK is inconsistent/after-window/invalid-ledger: STOP when allowed, otherwise null. Operator STOP interval overrides both. Manual/disarm remain enforced by original R2. No command lifetime extension.",
+  "rollout": "Every fixture/controller runs until original collection, collision or960-step timeout. Assistance/recording failure is not early termination. All40outcomes remain in denominators.",
+  "capture": "Bounded last12complete records plus at most4first-event windows including first decline with permitted FORWARD, first corridor extension and guard/assistance/recorder faults. Retain early admission evidence; no full raw history claim.",
+  "mechanics_gates": [
+    "All new deterministic tests pass",
+    "Exactly40natural outcomes including faults",
+    "No mask/TTL/manual/disarm/STOP/range-loss violation",
+    "Zero nonzero applied outputs in600ms-delay fixtures",
+    "All source/input hashes unchanged"
+  ],
+  "development_evidence_gate": {
+    "no_finite_case_regression": true,
+    "no_wall_case_collision_increase": true,
+    "at_least_one_finite_case_improves": true,
+    "wall_corridor_extension_count_must_be_zero": true
+  },
+  "decision": "Development pass permits engineering review only. No automatic training/deployment. Any failure/regression closes this version for saved-evidence review, not threshold sweep or repeated scoring.",
+  "future_partitions_reserved_not_opened": {
+    "training": [
+      36000000,
+      36005999
+    ],
+    "development_scene_seeds_already_exposed_after_this_trial": [
+      36000000,
+      36000013
+    ],
+    "validation_nominal": [
+      38000000,
+      38000399
+    ],
+    "validation_stress": [
+      38500000,
+      38500399
+    ],
+    "test_nominal": [
+      40000000,
+      40000599
+    ],
+    "test_stress": [
+      40500000,
+      40500599
+    ],
+    "reservation_is_not_training_authorization": true
+  },
+  "new_development_seeds": [
+    37000000,
+    37000009
+  ],
+  "geometry_classification_or_certified_corridor_claim": false,
+  "validation_or_test_used": false,
+  "training_started": false,
+  "policy_is_trained": false,
+  "physical_motor_transport": false,
+  "output_limit_mib": 64,
+  "minimum_free_disk_mib": 256
+}

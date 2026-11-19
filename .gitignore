@@ -1,0 +1,16 @@
+node_modules/
+.wrangler/
+.dev.vars*
+.env*
+backend/data/
+ai/data/
+ai/runs/
+__pycache__/
+*.sqlite*
+*.credentials*
+public/
+build/
+outputs/
+work/
+tmp/phone-camera-qa-venv/
+/data/

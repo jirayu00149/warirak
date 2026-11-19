@@ -1,0 +1,32 @@
+{
+  "schema": "warirak.navigation-episode-preflight-plan.v1",
+  "scope_type": "software_only",
+  "scope": "Deterministic R2 episode-step/reward/credit ownership and bounded commit fault tests; no model training, policy-performance comparison, held-out evaluation or deployment",
+  "bridge_schema": "warirak.navigation-r2-episode-bridge.v1",
+  "credit_schema": "warirak.navigation-duration-credit.v1",
+  "reward": "Original3*distance_progress-.015+40*collection-30*collision-10*first_assistance. World truth only for reward/outcomes, not actor vectors.",
+  "duration_credit": "Every original100ms plant step is accounted. Null new requests are not relabeled as STOP; reward accumulates under the actual preceding request with gamma^duration. A leading passive prefix has explicit unattributed reward, never a fabricated action. One-step learner conversion rejects duration>1.",
+  "current_learning_compatibility_limit": "Frozen learner currently accepts only100ms one-step records. Multi-step credit is recorded correctly but NOT yet trainable by it. Duration-aware learner/discount preflight required before training that includes request gaps; never discard, split or retime such rewards.",
+  "preserved": ["Original R2 source/hash/960step horizon/current/inertia/noise/dropout/gains/guards", "400ms original request lifetime and0/300/600ms ACTUATOR transport delay, separate from model-inference wait", "Manual/disarm/ACK/watchdog and sidecar-v2 original identities", "Natural STOP/assistance collision and full-timeout outcome accounting", "New epoch clears history, not physical tails or rewards", "Physical transport alwaysfalse; no source kits/deploy/production policy changes"],
+  "test_recipe": {
+    "node_target": "tests/navigation-episode-bridge.test.mjs",
+    "node_minimum_passed": 11,
+    "unit_seeds": [11100,11103,11106,11120,11130,11131,11140,11150,11160],
+    "geometry": "Center/no obstacles plus analytical four-step bank-drift collision fixtures. Generated R2 current/noise/dropouts/gains retained; only position/target/obstacles/actuator-delay fixture fields changed. Not a collision-rate benchmark.",
+    "plant_step_budget": "Three ten-step snapshot-equivalence checks, five authority steps, two natural four-step drift collisions, three wait-credit steps, two reply-cancel steps; no learning/model performance measurement.",
+    "node_checks": ["Unchanged reward components", "Exact full snapshot equality to bare R2 at all three actuator delays", "Manual/disarm/cancel memory boundaries with consecutive records", "Actual collision after STOP with zero applied command", "First assistance charged once and later collision retained", "Discounted duration credit and raw reward/step conservation", "Rejected reply never causes a new or restamped request", "Prepared data ownership and no operator action", "Bounded original bridge examples for Python schema validation"],
+    "python_target": "tests/test_navigation_commit.py",
+    "python_minimum_passed": 9,
+    "storage_fixture_seeds": [11200,11201,11202],
+    "python_checks": ["Real-bridge one-step packets accepted by frozen learner without relabeling", "Explicit cursor/next-seed initialization", "Two verified retained generations with bounded orphan budget", "Controlled interruption after checkpoint/generation/before pointer restores old complete learner", "Controlled interruption after pointer restores new complete learner/result", "Exact learner RNG/replay/Adam restoration using bounded synthetic unit gradients", "No skipped seed, censored outcome, pending tail or nonfinite result", "Hash/lock/path/protocol protection", "Orphans preserved, never automatically promoted"],
+    "commit_limit": "At most8generation directories and4pointer-pending files; two committed generations retained. Prune only previous committed hash-verified known files within resolved owned root, no recursive deletion. Orphans preserved for review.",
+    "crash_scope": "Controlled Python exceptions at transaction boundaries, not arbitrary hard-kill or power-loss durability. A surviving process lock requires owner/process inspection before recovery; not silently removed.",
+    "unit_optimizer_limit": "At most8synthetic optimizer updates in commit tests; not dataset/plant training. Temporary checkpoint cleanup target is resolved and verified inside workspace/work before recursive cleanup."
+  },
+  "gate": "All11Node+9Python new tests pass and frozen upstream hashes remain. Approves component review and duration-aware learning/runner protocol work only. No automatic training approval, especially while duration credit is incompatible with one-step learner.",
+  "actual_training_started": false,
+  "plant_performance_trial_started": false,
+  "validation_partition_opened": false,
+  "test_partition_opened": false,
+  "physical_motor_transport": false
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "warirak.navigation-history-preflight-plan.v1",
+  "scope": "Software representation and local Node/Python wire validation only; no training, policy rollout, model selection, held-out evaluation or deployment",
+  "hypothesis": "A fixed continuous three-frame observation history with explicit known/time masks can represent measured drift and distinguish missing evidence from measured zero without exposing diagnostic world truth or the current selected action.",
+  "encoder_schema": "warirak.navigation-history-vector.v1",
+  "request_schema": "warirak.navigation-inference-request.v1",
+  "reply_schema": "warirak.navigation-inference-reply.v1",
+  "layout": "ai/navigation-history-layout.json",
+  "shape": [3, 78],
+  "vector_size": 234,
+  "boundary_rules": [
+    "Only canonical simulation features and sidecar-v2 original record identities; same epoch and increasing original clocks/sequences.",
+    "Cut history at gaps over300ms or noncontiguous record sequence; reject cross-epoch histories and conflicting current records.",
+    "Recompute age at encoding from original capture clocks; unknown numeric=0 with known=0, measured zero=0 with known=1.",
+    "Only causal previous original requests; do not encode current selected action, seed, geometry label, reward, raw world coordinates or motor-derived measured velocity.",
+    "Action mask is seven navigation requests only; operator recovery may be historical input, never an actor action.",
+    "One latest pending inference per explicit client session; cancellation, replay, old epoch/sequence and clock regression cannot restore cancelled proposals.",
+    "Reply must match original session/request, epoch/record, vector digest, model schema, allowed action and exclusive original observation+300ms deadline.",
+    "No clocks are refreshed by Python or inference wait; digital fixture output is not physical command authorization."
+  ],
+  "python_scope": "Decode canonical Node vector, validate shape/domain/mask/digest and exercise explicit masked-argmax fixtures. No trained model, optimizer, replay memory or training code loaded.",
+  "test_recipe": {
+    "runner": "Node built-in test runner with Python subprocess fixtures; no environment step or policy runner",
+    "target": "tests/navigation-history.test.mjs",
+    "minimum_passed": 26,
+    "allowed_saved_input": "work/corridor-selector-v2-dev/candidate-left_finite.json final_recorder.records only",
+    "saved_input_purpose": "Encode existing full accepted records once; do not reconstruct omitted trajectory or replay the plant.",
+    "checks": ["Known-zero/missing separation and bounded normalization", "Original age/cache/drift semantics", "Causal request history and epoch/clock/record boundaries", "Diagnostic-input exclusion and frozen-source hashes", "Reply bindings, mask, expiry, cancellation and replay", "Exact JSON roundtrip of all234values and binary64LE digest between Node and Python", "Strict Python JSON, numeric and semantic validation"]
+  },
+  "gate": "All targeted checks pass and immutable upstream evidence/source hashes match; review approves only component use and separate learning architecture/protocol preflight, never physical or deployment readiness",
+  "model_accuracy_measured": false,
+  "raspberry_pi_latency_measured": false,
+  "training_allowed": false,
+  "validation_or_test_partition_opened": false,
+  "physical_motor_transport": false
+}

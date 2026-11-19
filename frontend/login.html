@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5fbfc">
+  <title>วารีรักษ์ · เข้าสู่ระบบผู้ดูแล</title>
+  <link rel="icon" href="/assets/mark.svg">
+  <link rel="stylesheet" href="/portal.css">
+  <link rel="stylesheet" href="/portal-v2.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap"><link rel="stylesheet" href="/warirak-theme.css?v=ds3-light">
+  <script type="module" src="/login.js"></script>
+</head>
+<body class="login-page">
+  <a class="skip-link" href="#login-form">ข้ามไปยังแบบฟอร์ม</a>
+  <header class="portal-header">
+    <a class="portal-brand" href="/"><img src="/assets/mark.svg" width="36" height="36" alt="">วารีรักษ์</a>
+    <a class="portal-header-end" href="/monitor">← หน้าติดตามเรือ</a>
+  </header>
+  <main class="login-main">
+    <section class="login-panel" aria-labelledby="login-heading">
+      <h1 id="login-heading">เข้าสู่ระบบผู้ดูแล</h1>
+      <form id="login-form">
+        <label for="login-username">ชื่อผู้ใช้</label>
+        <input id="login-username" name="username" autocomplete="username" required>
+        <label for="login-key">รหัสผ่าน</label>
+        <div class="password-field">
+          <input id="login-key" name="password" type="password" autocomplete="current-password" required>
+          <button id="toggle-password" type="button" aria-label="แสดงรหัสผ่าน" aria-pressed="false">แสดง</button>
+        </div>
+        <button id="login-submit" type="submit" class="portal-button primary">เข้าสู่ระบบ</button>
+      </form>
+      <p id="login-error" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+  <footer class="login-footer">คณะวิศวกรรมศาสตร์ มหาวิทยาลัยทักษิณ</footer>
+</body>
+</html>

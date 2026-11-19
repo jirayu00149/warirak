@@ -1,0 +1,7 @@
+pyserial==3.5
+ultralytics==8.4.190
+ncnn==1.0.20261020
+numpy>=1.24,<2; python_version < '3.13'
+opencv-python==4.11.0.86; python_version < '3.13'
+numpy>=2.1,<2.3; python_version >= '3.13'
+opencv-python==4.12.0.88; python_version >= '3.13'
