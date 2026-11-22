@@ -570,7 +570,7 @@ def exchange(socket, jpeg, websocket):
     return reply
 
 
-MAX_IN_FLIGHT = int(os.environ.get('WARIRAK_LIVE_INFLIGHT', '2'))
+MAX_IN_FLIGHT = int(os.environ.get('WARIRAK_LIVE_INFLIGHT', '1'))
 
 
 class PipelinedSender:
