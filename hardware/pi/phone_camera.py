@@ -564,8 +564,47 @@ def exchange(socket, jpeg, websocket):
     return reply
 
 
+MAX_IN_FLIGHT = int(os.environ.get('WARIRAK_LIVE_INFLIGHT', '3'))
+
+
+class PipelinedSender:
+    """Send frames without waiting for each reply; at most MAX_IN_FLIGHT unanswered frames.
+
+    Stop-and-wait limited the frame rate to 1/(upload + round trip) on a phone hotspot.
+    A small window keeps latency bounded while letting the link stay busy.
+    """
+
+    def __init__(self, socket, websocket, window=MAX_IN_FLIGHT):
+        self.socket, self.websocket = socket, websocket
+        self.slots = threading.Semaphore(max(1, window))
+        self.lock = threading.Lock()
+        self.failed = threading.Event()
+        self.accepted = 0
+        self.reader = threading.Thread(target=self._read, daemon=True)
+        self.reader.start()
+
+    def _read(self):
+        try:
+            while not self.failed.is_set():
+                reply = self.socket.recv()
+                if reply not in ('ok', 'skip'):
+                    break
+                if reply == 'ok':
+                    self.accepted += 1
+                self.slots.release()
+        except Exception:
+            pass
+        self.failed.set()
+        self.slots.release()
+
+    def send(self, jpeg, timeout=8):
+        if self.failed.is_set() or not self.slots.acquire(timeout=timeout) or self.failed.is_set():
+            raise self.websocket.WebSocketConnectionClosedException()
+        with self.lock:
+            self.socket.send_binary(jpeg)
+
+
 def _live_loop(stream, url, config, args, cv2, websocket, ai, deadline, interval):
-    sent = 0
     delay = 1
     while time.monotonic() < deadline:
         socket = None
@@ -574,6 +613,8 @@ def _live_loop(stream, url, config, args, cv2, websocket, ai, deadline, interval
                 'Authorization': 'Bearer ' + config['token'],
                 'User-Agent': USER_AGENT
             })
+            socket.settimeout(None)
+            sender, announced = PipelinedSender(socket, websocket), False
             while time.monotonic() < deadline:
                 started = time.monotonic()
                 _, received, captured_at, frame = stream.next()
@@ -581,16 +622,17 @@ def _live_loop(stream, url, config, args, cv2, websocket, ai, deadline, interval
                 result = ai.take()
                 if result and time.monotonic() - result[1] <= MAX_FRAME_AGE:
                     # The annotated frame carries its own metadata and capture time.
-                    exchange(socket, result[0], websocket)
+                    sender.send(result[0])
                 jpeg = preview_jpeg(cv2, frame)
                 if time.monotonic() - received > MAX_FRAME_AGE:
                     continue
-                if exchange(socket, jpeg, websocket) == 'ok':
-                    sent += 1
+                sender.send(jpeg)
+                if sender.accepted:
                     delay = 1
-                    if sent == 1:
+                    if not announced:
+                        announced = True
                         print('Live camera connected. Open the Dashboard to watch.', flush=True)
-                    if args.frames and sent >= args.frames:
+                    if args.frames and sender.accepted >= args.frames:
                         return 0
                 time.sleep(max(0, interval - (time.monotonic() - started)))
         except websocket.WebSocketBadStatusException as error:
