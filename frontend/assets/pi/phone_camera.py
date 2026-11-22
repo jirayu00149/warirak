@@ -64,7 +64,19 @@ ai();
 """
 
 
+PICAMERA_PREFIX = 'picamera'
+
+
+def is_picamera(value):
+    return isinstance(value, str) and (value == PICAMERA_PREFIX or value.startswith(PICAMERA_PREFIX + ':'))
+
+
 def validate_source(value):
+    if is_picamera(value):
+        index = value.partition(':')[2] or '0'
+        if not index.isdigit() or int(index) > 3:
+            raise ValueError('Use picamera or picamera:0 / picamera:1 for the Raspberry Pi camera.')
+        return value
     if not isinstance(value, str) or any(ord(c) < 33 for c in value):
         raise ValueError('Camera URL must not contain spaces or control characters.')
     u = urllib.parse.urlsplit(value)
@@ -78,9 +90,9 @@ def validate_source(value):
 
 
 def configure(path):
-    source = validate_source(getpass.getpass('Paste camera RTSP/MJPEG URL (input hidden): ').strip())
+    source = validate_source(getpass.getpass('Paste camera RTSP/MJPEG URL, or type picamera for the Pi camera (input hidden): ').strip())
     u = urllib.parse.urlsplit(source)
-    if u.username is None:
+    if not is_picamera(source) and u.username is None:
         username = input('Camera username (Enter if authentication is disabled): ').strip()
         if username:
             password = getpass.getpass('Camera password (input hidden): ')
@@ -113,10 +125,75 @@ def put_latest(channel, item):
             pass
 
 
+PICAMERA_SIZE = (int(os.environ.get('WARIRAK_PICAM_WIDTH', '1280')), int(os.environ.get('WARIRAK_PICAM_HEIGHT', '720')))
+PICAMERA_FPS = int(os.environ.get('WARIRAK_PICAM_FPS', '15'))
+
+
+def picamera_command(source):
+    import shutil
+    exe = shutil.which('rpicam-vid') or shutil.which('libcamera-vid')
+    if not exe:
+        raise RuntimeError('rpicam-vid not found: sudo apt install rpicam-apps')
+    index = source.partition(':')[2] or '0'
+    w, h = PICAMERA_SIZE
+    return [exe, '--camera', index, '-t', '0', '-n', '--codec', 'mjpeg', '--quality', '80',
+            '--width', str(w), '--height', str(h), '--framerate', str(PICAMERA_FPS), '--flush', '-o', '-']
+
+
+def picamera_worker(source, channel, stop):
+    """Read MJPEG from rpicam-vid (Pi 5 / libcamera) and keep only the newest frame."""
+    import subprocess
+    import cv2
+    import numpy as np
+    proc = subprocess.Popen(picamera_command(source), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=0)
+    buffer, sequence = bytearray(), 0
+    try:
+        while not stop.is_set():
+            chunk = proc.stdout.read(65536)
+            if not chunk:
+                break
+            buffer += chunk
+            latest = None
+            while True:
+                start = buffer.find(b'\xff\xd8')
+                end = buffer.find(b'\xff\xd9', start + 2) if start >= 0 else -1
+                if start < 0 or end < 0:
+                    if start > 0:
+                        del buffer[:start]
+                    elif start < 0 and len(buffer) > 1:
+                        del buffer[:-1]
+                    break
+                latest = bytes(buffer[start:end + 2])
+                del buffer[:end + 2]
+                sequence += 1
+            if latest is None or not channel.empty():
+                continue
+            frame = cv2.imdecode(np.frombuffer(latest, np.uint8), cv2.IMREAD_COLOR)
+            if frame is None:
+                continue
+            put_latest(channel, (sequence, time.monotonic(), datetime.now(timezone.utc).isoformat(), frame))
+            if len(buffer) > 8 * 1024 * 1024:
+                buffer.clear()
+    finally:
+        proc.terminate()
+        try:
+            proc.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+
+
 def capture_worker(source, channel, stop):
     # Native decoder diagnostics can include a URL/password. Keep them off logs.
     with open(os.devnull, 'w') as null:
         os.dup2(null.fileno(), 2)
+    if is_picamera(source):
+        try:
+            picamera_worker(source, channel, stop)
+        except Exception:
+            pass
+        finally:
+            channel.cancel_join_thread()
+        return
     camera = None
     try:
         import cv2
@@ -176,7 +253,7 @@ class LatestStream:
             except queue.Empty:
                 if not self.process.is_alive():
                     break
-        raise RuntimeError('No fresh frame. Keep the iPhone app open; check its URL, credentials and local network.')
+        raise RuntimeError('No fresh frame. Pi camera: check the ribbon cable and run rpicam-hello --list-cameras. Phone camera: keep the app open; check its URL, credentials and local network.')
 
     def __exit__(self, *args):
         self.stop.set()

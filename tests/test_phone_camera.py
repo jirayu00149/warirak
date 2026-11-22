@@ -212,3 +212,13 @@ class PhoneCameraTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class PiCameraSourceTests(unittest.TestCase):
+    def test_picamera_sources(self):
+        import phone_camera as p
+        self.assertEqual(p.validate_source('picamera'), 'picamera')
+        self.assertEqual(p.validate_source('picamera:1'), 'picamera:1')
+        for bad in ('picamera:x', 'picamera:9'):
+            with self.assertRaises(ValueError):
+                p.validate_source(bad)
