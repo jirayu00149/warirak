@@ -31,7 +31,7 @@ echo "== 4/5 stop old camera process, check"
 pkill -f "phone_camera.py run" 2>/dev/null; sleep 2; pkill -f "multiprocessing.spawn" 2>/dev/null; sleep 1
 timeout 60 "$PY" phone_camera.py check 2>&1 | tail -5
 echo "== 5/5 start live + AI in background (log: ~/warirak-monitor/picam.log)"
-nohup "$PY" phone_camera.py run --live --detect --fps 15 > ~/warirak-monitor/picam.log 2>&1 < /dev/null &
+WARIRAK_LIVE_SIZE=480x360 WARIRAK_LIVE_QUALITY=55 WARIRAK_CAMERA_LABEL="USB camera" nohup "$PY" phone_camera.py run --live --detect --fps 12 > ~/warirak-monitor/picam.log 2>&1 < /dev/null &
 sleep 20
 tail -n 8 ~/warirak-monitor/picam.log
 pgrep -f "phone_camera.py run" >/dev/null && echo "OK: camera is running. Open the monitor page." || echo "ERROR: camera process stopped; see log above"

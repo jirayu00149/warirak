@@ -294,7 +294,13 @@ class LatestStream:
         self.channel.close()
 
 
-def preview_jpeg(cv2, frame, detector=None, captured_at=None, quality=65):
+LIVE_W, LIVE_H = (int(v) for v in os.environ.get('WARIRAK_LIVE_SIZE', '640x480').lower().split('x'))
+LIVE_QUALITY = int(os.environ.get('WARIRAK_LIVE_QUALITY', '65'))
+CAMERA_LABEL = os.environ.get('WARIRAK_CAMERA_LABEL', 'Warirak camera')
+
+
+def preview_jpeg(cv2, frame, detector=None, captured_at=None, quality=None):
+    quality = LIVE_QUALITY if quality is None else quality
     image = frame.copy()
     metadata = None
     if detector:
@@ -304,9 +310,9 @@ def preview_jpeg(cv2, frame, detector=None, captured_at=None, quality=65):
         metadata = detection_metadata(detections, w, h, (time.monotonic()-started)*1000,
                                       captured_at or datetime.now(timezone.utc).isoformat())
     h, w = image.shape[:2]
-    factor = min(640 / w, 480 / h)
+    factor = min(LIVE_W / w, LIVE_H / h, 1.0)
     image = cv2.resize(image, (max(16, round(w * factor)), max(16, round(h * factor))))
-    cv2.putText(image, 'iPhone test | received by Pi | motors disabled', (6, 18),
+    cv2.putText(image, CAMERA_LABEL + ' | motors disabled', (6, 18),
                 cv2.FONT_HERSHEY_SIMPLEX, .35, (20, 230, 110), 1, cv2.LINE_AA)
     ok, jpeg = cv2.imencode('.jpg', image, [cv2.IMWRITE_JPEG_QUALITY, quality])
     if not ok or len(jpeg) > 262144:
@@ -564,7 +570,7 @@ def exchange(socket, jpeg, websocket):
     return reply
 
 
-MAX_IN_FLIGHT = int(os.environ.get('WARIRAK_LIVE_INFLIGHT', '3'))
+MAX_IN_FLIGHT = int(os.environ.get('WARIRAK_LIVE_INFLIGHT', '2'))
 
 
 class PipelinedSender:
