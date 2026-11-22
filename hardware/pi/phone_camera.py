@@ -580,6 +580,8 @@ class PipelinedSender:
         self.lock = threading.Lock()
         self.failed = threading.Event()
         self.accepted = 0
+        self.sent = 0
+        self.outstanding = 0
         self.reader = threading.Thread(target=self._read, daemon=True)
         self.reader.start()
 
@@ -589,6 +591,10 @@ class PipelinedSender:
                 reply = self.socket.recv()
                 if reply not in ('ok', 'skip'):
                     break
+                with self.lock:
+                    if self.outstanding <= 0:
+                        continue  # never free more slots than frames sent
+                    self.outstanding -= 1
                 if reply == 'ok':
                     self.accepted += 1
                 self.slots.release()
@@ -601,7 +607,9 @@ class PipelinedSender:
         if self.failed.is_set() or not self.slots.acquire(timeout=timeout) or self.failed.is_set():
             raise self.websocket.WebSocketConnectionClosedException()
         with self.lock:
-            self.socket.send_binary(jpeg)
+            self.outstanding += 1
+            self.sent += 1
+        self.socket.send_binary(jpeg)
 
 
 def _live_loop(stream, url, config, args, cv2, websocket, ai, deadline, interval):
@@ -613,8 +621,9 @@ def _live_loop(stream, url, config, args, cv2, websocket, ai, deadline, interval
                 'Authorization': 'Bearer ' + config['token'],
                 'User-Agent': USER_AGENT
             })
-            socket.settimeout(None)
-            sender, announced = PipelinedSender(socket, websocket), False
+            if hasattr(socket, "settimeout"):
+                socket.settimeout(None)
+            sender, announced, frames_sent = PipelinedSender(socket, websocket), False, 0
             while time.monotonic() < deadline:
                 started = time.monotonic()
                 _, received, captured_at, frame = stream.next()
@@ -627,12 +636,13 @@ def _live_loop(stream, url, config, args, cv2, websocket, ai, deadline, interval
                 if time.monotonic() - received > MAX_FRAME_AGE:
                     continue
                 sender.send(jpeg)
-                if sender.accepted:
+                frames_sent += 1
+                if sender.accepted or frames_sent >= MAX_IN_FLIGHT:
                     delay = 1
                     if not announced:
                         announced = True
                         print('Live camera connected. Open the Dashboard to watch.', flush=True)
-                    if args.frames and sender.accepted >= args.frames:
+                    if args.frames and frames_sent >= args.frames:
                         return 0
                 time.sleep(max(0, interval - (time.monotonic() - started)))
         except websocket.WebSocketBadStatusException as error:
