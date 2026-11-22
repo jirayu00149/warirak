@@ -745,4 +745,8 @@ def main():
 
 if __name__ == '__main__':
     mp.freeze_support()
+    import signal
+    # pkill/systemd send SIGTERM: exit through the context managers so the camera
+    # reader child process is stopped too and does not keep /dev/video0 busy.
+    signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
     sys.exit(main())

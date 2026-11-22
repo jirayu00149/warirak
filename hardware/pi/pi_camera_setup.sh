@@ -28,7 +28,7 @@ mkdir -p ~/.config/warirak && chmod 700 ~/.config/warirak
 ( umask 077; printf '{"source": "%s"}' "$SOURCE" > "$CFG" )
 PY=~/Warirak_Pi5_Kit/.venv/bin/python; [ -x "$PY" ] || PY=python3
 echo "== 4/5 stop old camera process, check"
-pkill -f "phone_camera.py run" 2>/dev/null; sleep 1
+pkill -f "phone_camera.py run" 2>/dev/null; sleep 2; pkill -f "multiprocessing.spawn" 2>/dev/null; sleep 1
 timeout 60 "$PY" phone_camera.py check 2>&1 | tail -5
 echo "== 5/5 start live + AI in background (log: ~/warirak-monitor/picam.log)"
 nohup "$PY" phone_camera.py run --live --detect --fps 15 > ~/warirak-monitor/picam.log 2>&1 < /dev/null &
