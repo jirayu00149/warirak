@@ -42,8 +42,30 @@ function renderCamera(age=image?Math.max(0,Math.floor((now()-image.received_at_m
  // AI results are shown on their own frame, with that frame's own capture time.
  const meta=ai?.metadata,aiAge=meta?now()-Date.parse(meta.captured_at):Infinity,aiFresh=fresh&&aiAge>=-5000&&aiAge<15000;
  renderDetections($('#yolo-results'),meta,!!image,aiFresh);
- if(meta){$('#yolo-figure').hidden=false;$('#yolo-figure').dataset.state=aiFresh?'ready':'stale';$('#yolo-caption').textContent=`ภาพที่ AI ตรวจ · ถ่ายเมื่อ ${clock(Date.parse(meta.captured_at))}${Number.isFinite(aiAge)&&aiAge>=0?' ('+frameAgeText(Math.floor(aiAge/1000))+'ที่แล้ว)':''}`;}
+ // AI boxes are drawn on the live view; the separate AI frame panel stays hidden.
+ $('#yolo-figure').hidden=true;
+ drawAiOverlay(fresh?meta:null,aiAge);
 }
+const AI_COLORS={plastic_bottle:'#22c55e',bottle_cap:'#f59e0b'},AI_NAMES={plastic_bottle:'ขวด',bottle_cap:'ฝาขวด'};
+function drawAiOverlay(meta,ageMs){
+ const canvas=$('#ai-overlay'),img=$('#boat-camera'),badge=$('#ai-badge');if(!canvas||!img)return;
+ const box=canvas.parentElement.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+ canvas.width=Math.round(box.width*dpr);canvas.height=Math.round(box.height*dpr);
+ const g=canvas.getContext('2d');g.clearRect(0,0,canvas.width,canvas.height);
+ const show=meta&&!img.hidden&&img.naturalWidth&&ageMs>=-5000&&ageMs<3000;
+ badge.hidden=!show;if(!show)return;
+ // Map the AI frame's coordinates onto the live image drawn with object-fit: contain.
+ const scale=Math.min(box.width/img.naturalWidth,box.height/img.naturalHeight),w=img.naturalWidth*scale,h=img.naturalHeight*scale,ox=(box.width-w)/2,oy=(box.height-h)/2;
+ const [iw,ih]=meta.image_size||[img.naturalWidth,img.naturalHeight],sx=w/iw,sy=h/ih,alpha=ageMs<1500?1:Math.max(.25,1-(ageMs-1500)/1500);
+ g.save();g.scale(dpr,dpr);g.globalAlpha=alpha;g.lineWidth=2;g.font='600 11px Noto,Tahoma,sans-serif';g.textBaseline='bottom';
+ for(const d of meta.detections||[]){const[x1,y1,x2,y2]=d.xyxy,c=AI_COLORS[d.class_name]||'#22c55e',x=ox+x1*sx,y=oy+y1*sy,bw=(x2-x1)*sx,bh=(y2-y1)*sy,label=`${AI_NAMES[d.class_name]||d.class_name} ${Math.round(d.confidence*100)}%`;
+  g.strokeStyle=c;g.strokeRect(x,y,bw,bh);const tw=g.measureText(label).width+8,ty=y>16?y:y+bh+16;g.fillStyle=c;g.fillRect(x-1,ty-16,tw,16);g.fillStyle='#0b1a14';g.fillText(label,x+3,ty-2);}
+ g.restore();
+ const counts={};for(const d of meta.detections||[])counts[d.class_name]=(counts[d.class_name]||0)+1;
+ const parts=Object.entries(counts).map(([k,v])=>`${AI_NAMES[k]||k} ${v}`);
+ badge.textContent=`AI · ${parts.length?parts.join(' · '):'ไม่พบขยะ'} · ${ageMs<1000?'ล่าสุด':(ageMs/1000).toFixed(1)+' วิที่แล้ว'}`;
+}
+addEventListener('resize',()=>renderCamera());
 function renderDay(){if(!data)return;const row=data.daily.find(d=>d.date===detailDate)||data.daily.at(-1);if(!row)return;detailDate=row.date;$('#report-day-title').textContent=dateText(row.date);$('#report-day-values').textContent=`ยืนยันเก็บ ${row.total} ชิ้น · ขวด ${row.bottles} · ฝาขวด ${row.caps} · ไม่ระบุชนิด ${row.unknown}`;$('#user-daily-chart').querySelectorAll('button').forEach(b=>{const active=b.dataset.date===row.date;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active));});}
 function render(){if(!data)return;const options=data.devices.map(d=>`<option value="${esc(d.id)}">${esc(d.name)}</option>`).join('');$('#boat-select').innerHTML=options||'<option value="">ยังไม่มีเรือในระบบ</option>';$('#boat-select').value=selectedId;$('#report-boat-select').innerHTML='<option value="">ทุกลำ</option>'+options;$('#report-boat-select').value=reportDeviceId;
  const d=device();$('#selected-boat-name').textContent=d?.name||'ยังไม่มีเรือ';$('#live-battery').textContent=piStatus(d,now()).battery;$('#live-state').textContent=({monitoring:'ส่งสถานะ Pi · ยังไม่ควบคุมเรือ',idle:'รอเริ่มงาน',standby:'พร้อมทำงาน',collecting:'กำลังเก็บขยะ',searching:'กำลังค้นหา',returning:'กำลังกลับ',paused:'หยุดพัก',stopped:'หยุดทำงาน',error:'พบปัญหา'})[d?.state]||(d?.state?'ไม่ระบุสถานะ':'—');
