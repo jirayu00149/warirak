@@ -684,6 +684,10 @@ def main():
             print(f'Local preview port {args.local_port} is already in use.', file=sys.stderr)
             return 2
         print('Camera setup failed: check app stream URL/password, same network, config and kit Python environment. No credentials printed.', file=sys.stderr)
+        import re
+        detail = re.sub(r'(?i)([a-z][a-z0-9+.-]*://)[^/@\s]*@', r'\1***@', str(error))
+        detail = re.sub(r'(?i)(token|password|bearer|key)[=: ]+\S+', r'\1=***', detail)
+        print(f'Reason: {type(error).__name__}: {detail[:300]}', file=sys.stderr)
         return 2
 
 
