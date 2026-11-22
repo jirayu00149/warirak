@@ -222,3 +222,12 @@ class PiCameraSourceTests(unittest.TestCase):
         for bad in ('picamera:x', 'picamera:9'):
             with self.assertRaises(ValueError):
                 p.validate_source(bad)
+
+
+class UsbCameraSourceTests(unittest.TestCase):
+    def test_usb_sources(self):
+        import phone_camera as p
+        self.assertEqual(p.validate_source('usb'), 'usb')
+        self.assertEqual(p.usb_device('usb:2'), '/dev/video2')
+        with self.assertRaises(ValueError):
+            p.validate_source('usb:x')

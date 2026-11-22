@@ -71,7 +71,29 @@ def is_picamera(value):
     return isinstance(value, str) and (value == PICAMERA_PREFIX or value.startswith(PICAMERA_PREFIX + ':'))
 
 
+USB_PREFIX = 'usb'
+
+
+def is_usbcam(value):
+    return isinstance(value, str) and (value == USB_PREFIX or value.startswith(USB_PREFIX + ':'))
+
+
+def usb_device(source):
+    """usb -> first USB webcam (/dev/v4l/by-id/*usb*-video-index0); usb:N -> /dev/videoN."""
+    index = source.partition(':')[2]
+    if index:
+        return f'/dev/video{int(index)}'
+    import glob
+    found = sorted(glob.glob('/dev/v4l/by-id/*usb*-video-index0')) or sorted(glob.glob('/dev/v4l/by-id/*-video-index0'))
+    return os.path.realpath(found[0]) if found else '/dev/video0'
+
+
 def validate_source(value):
+    if is_usbcam(value):
+        index = value.partition(':')[2]
+        if index and (not index.isdigit() or int(index) > 63):
+            raise ValueError('Use usb or usb:0 / usb:1 for a USB webcam.')
+        return value
     if is_picamera(value):
         index = value.partition(':')[2] or '0'
         if not index.isdigit() or int(index) > 3:
@@ -90,9 +112,9 @@ def validate_source(value):
 
 
 def configure(path):
-    source = validate_source(getpass.getpass('Paste camera RTSP/MJPEG URL, or type picamera for the Pi camera (input hidden): ').strip())
+    source = validate_source(getpass.getpass('Paste camera RTSP/MJPEG URL, or type usb / picamera (input hidden): ').strip())
     u = urllib.parse.urlsplit(source)
-    if not is_picamera(source) and u.username is None:
+    if not (is_picamera(source) or is_usbcam(source)) and u.username is None:
         username = input('Camera username (Enter if authentication is disabled): ').strip()
         if username:
             password = getpass.getpass('Camera password (input hidden): ')
@@ -197,11 +219,19 @@ def capture_worker(source, channel, stop):
     camera = None
     try:
         import cv2
-        cv2.setLogLevel(0)
-        camera = cv2.VideoCapture(source, cv2.CAP_FFMPEG, [
-            cv2.CAP_PROP_OPEN_TIMEOUT_MSEC, 5000,
-            cv2.CAP_PROP_READ_TIMEOUT_MSEC, 5000,
-        ])
+        if hasattr(cv2, 'setLogLevel'):
+            cv2.setLogLevel(0)
+        if is_usbcam(source):
+            camera = cv2.VideoCapture(usb_device(source), cv2.CAP_V4L2)
+            camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
+            camera.set(cv2.CAP_PROP_FRAME_WIDTH, PICAMERA_SIZE[0])
+            camera.set(cv2.CAP_PROP_FRAME_HEIGHT, PICAMERA_SIZE[1])
+            camera.set(cv2.CAP_PROP_FPS, PICAMERA_FPS)
+        else:
+            camera = cv2.VideoCapture(source, cv2.CAP_FFMPEG, [
+                cv2.CAP_PROP_OPEN_TIMEOUT_MSEC, 5000,
+                cv2.CAP_PROP_READ_TIMEOUT_MSEC, 5000,
+            ])
         if not camera.isOpened():
             return
         camera.set(cv2.CAP_PROP_BUFFERSIZE, 1)
@@ -253,7 +283,7 @@ class LatestStream:
             except queue.Empty:
                 if not self.process.is_alive():
                     break
-        raise RuntimeError('No fresh frame. Pi camera: check the ribbon cable and run rpicam-hello --list-cameras. Phone camera: keep the app open; check its URL, credentials and local network.')
+        raise RuntimeError('No fresh frame. USB camera: check ls /dev/v4l/by-id and that no other program uses it. Pi camera: check the ribbon cable and run rpicam-hello --list-cameras. Phone camera: keep the app open; check its URL, credentials and local network.')
 
     def __exit__(self, *args):
         self.stop.set()
