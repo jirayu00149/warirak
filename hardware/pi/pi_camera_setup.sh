@@ -5,6 +5,10 @@ fail() { echo "ERROR: $*"; exit 0; }
 cd ~/warirak-monitor 2>/dev/null || fail "~/warirak-monitor not found"
 echo "== 1/5 download phone_camera.py"
 curl -fsSL https://raw.githubusercontent.com/jirayu00149/warirak/main/hardware/pi/phone_camera.py -o phone_camera.py.new && mv phone_camera.py.new phone_camera.py || echo "WARN: download failed, using existing file"
+RAW=https://raw.githubusercontent.com/jirayu00149/warirak/main/hardware/pi
+for f in detection_frame.py monitor_agent.py; do
+  if [ ! -f "$f" ] || [ "$f" = detection_frame.py ]; then curl -fsSL "$RAW/$f" -o "$f.new" && mv "$f.new" "$f" || echo "WARN: could not download $f"; fi
+done
 grep -q "def usb_device" phone_camera.py || fail "phone_camera.py has no USB camera support"
 echo "== 2/5 find camera"
 SOURCE=""
