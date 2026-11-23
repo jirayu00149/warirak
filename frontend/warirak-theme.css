@@ -604,3 +604,50 @@ body { background: radial-gradient(1100px 520px at 90% -10%, rgba(8,145,178,.10)
 
 /* Simplified monitor: hide the boat computer panel until the Pi sends status */
 .pi-panel[data-state="waiting"]{display:none}
+
+/* ==========================================================================
+   v3 "Trust Blue" — applied from user research (2026-11-23):
+   blue is the most liked / most trusted web colour, white backgrounds read
+   clean, green stays for "live / ok". WCAG 2.2: text ≥ 4.5:1, tap targets
+   ≥ 44 px on touch screens, no body text under 12 px.
+   ========================================================================== */
+:root {
+  --ds-accent: #0369a1;            /* sky-blue 5.9:1 on white */
+  --ds-link: #0369a1;
+  --ds-ring: #0284c7;
+  --ds-accent-soft: rgba(3, 105, 161, .10);
+  --ds-fg: #0f3b57;                /* navy ink */
+  --ds-fg-2: #24506c;
+  --ds-fg-3: #46637a;              /* 6.0:1 */
+  --ds-bg: #f5f9fc; --ds-bg-2: #eef4fa;
+  --ds-border: #d7e4ef; --ds-control: #b6cadb;
+  --ds-bar: #cfe3f3;
+  --wr-hover: #075985;
+}
+body { background: radial-gradient(1100px 520px at 90% -10%, rgba(3,105,161,.08), transparent 60%), linear-gradient(180deg, var(--ds-bg), var(--ds-bg-2)) fixed; }
+:is(.portal-button, .button).primary:not(:disabled):hover, #login-submit:hover { background: #075985; border-color: #075985; }
+.portal-header nav a.active::after { background: linear-gradient(90deg, #0284c7, #16a34a); }
+.welcome-copy h1 { background: linear-gradient(120deg, #0f3b57 20%, #0369a1 65%, #15803d 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.user-chart button.selected > span, .user-chart button:hover > span { background: linear-gradient(180deg, #0284c7, #0369a1); }
+.boat-today { background: linear-gradient(160deg, rgba(3,105,161,.09), rgba(22,163,74,.05)); border-color: #cfe0ee; }
+:focus-visible { outline: 3px solid var(--ds-ring); outline-offset: 2px; }
+
+/* readable sizes: nothing below 12 px */
+.user-chart small, .user-chart strong, .report-stats small, .report-stats span, .yolo-label,
+.ai-badge, .demo-notice, .demo-notice *, .real-data-tag, .camera-toolbar > #camera-clock,
+.report-mission-limit, .portal-note > #last-refreshed, .portal-footer, .portal-breadcrumb { font-size: max(12px, 1em) !important; }
+.report-stats small, #report-day-values, .report-day-values { color: var(--ds-fg-3) !important; }
+
+/* touch screens: tap targets at least 44 px tall */
+@media (pointer: coarse), (max-width: 850px) {
+  .portal-header nav a, .portal-brand, .portal-header-end, #admin-login, #admin-entry,
+  .portal-breadcrumb a, .portal-footer a, .welcome-process a, article > a[href],
+  .monitor-actions .text-button, .report-day-nav button, .portal-button, #toggle-password {
+    min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .report-day-nav button { min-width: 44px; }
+  .monitor-actions .text-button { padding: 0 14px; }
+}
+#report-today, #report-day-values, .demo-disclosure strong, .demo-stage-toolbar span, .demo-next span { font-size: max(12px, 1em) !important; }
+.camera-toolbar { flex-wrap: wrap; row-gap: 4px; }
+.camera-toolbar > div { white-space: nowrap; flex-shrink: 0; }
