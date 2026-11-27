@@ -4,51 +4,100 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="วารีรักษ์ เรือเก็บขยะผิวน้ำต้นแบบจากมหาวิทยาลัยทักษิณ ติดตามภาพจากเรือและผลการเก็บขยะ">
-  <meta name="theme-color" content="#f5fbfc">
+  <meta name="theme-color" content="#1d3a6b">
   <title>วารีรักษ์ · เรือเก็บขยะผิวน้ำ</title>
   <link rel="icon" href="/assets/mark.svg">
-  <link rel="stylesheet" href="/portal.css">
-  <link rel="stylesheet" href="/portal-v2.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap"><link rel="stylesheet" href="/warirak-theme.css?v=ds5-admin">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600&family=IBM+Plex+Sans+Thai:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap">
+  <link rel="stylesheet" href="/home/home.css?v=bp1">
   <script type="module" src="/landing.js"></script>
 </head>
-<body class="warirak-welcome">
-  <a class="skip-link" href="#main">ข้ามไปยังเนื้อหา</a>
-  <header class="portal-header">
-    <a class="portal-brand" href="/" aria-current="page"><img src="/assets/mark.svg" width="36" height="36" alt="">วารีรักษ์</a>
-    <nav aria-label="เมนูหลัก">
-      <a href="/monitor">ภาพจากเรือ</a>
-      <a href="/monitor#reports">รายงาน</a>
-      <a href="/demo">ทดลองสาธิต</a>
-      
-    </nav>
-    <a class="portal-header-end" href="/login">ผู้ดูแลระบบ ↗</a>
+<body class="warirak-welcome hm-sheet">
+  <a class="skip-link hm-skip" href="#main">ข้ามไปยังเนื้อหา</a>
+  <header class="portal-header hm-bar">
+    <div class="container">
+      <a class="portal-brand hm-brand" href="/" aria-current="page"><img src="/assets/mark.svg" width="36" height="36" alt="">วารีรักษ์</a>
+      <nav aria-label="เมนูหลัก" class="hm-nav">
+        <a href="/monitor">ภาพจากเรือ</a>
+        <a href="/monitor#reports">รายงาน</a>
+        <a href="/demo">ทดลองสาธิต</a>
+      </nav>
+      <a class="portal-header-end hm-bar-end" href="/login">ผู้ดูแลระบบ</a>
+    </div>
   </header>
   <main id="main" class="welcome-main">
-    <section class="welcome-hero" aria-labelledby="hero-title">
-      <div class="welcome-copy">
-        <h1 id="hero-title">เรือเก็บขยะ<br>ผิวน้ำ</h1>
-        <p>ต้นแบบจากมหาวิทยาลัยทักษิณ พัฒนาขึ้นเพื่อเก็บขวดพลาสติกและฝาขวดที่ลอยน้ำด้วยกล้องและระบบสายพาน</p>
-        <div class="welcome-actions">
-          <a class="portal-button primary" href="/monitor" id="enter-monitor">ติดตามเรือ <span aria-hidden="true">↗</span></a>
-          <a class="portal-button secondary" href="/demo">ทดลองสาธิต</a>
+    <section class="welcome-hero hm-hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="welcome-copy hm-hero-copy">
+          <h1 id="hero-title">เรือเก็บขยะ<br>ผิวน้ำ</h1>
+          <p class="lead">ต้นแบบจากมหาวิทยาลัยทักษิณ พัฒนาขึ้นเพื่อเก็บขวดพลาสติกและฝาขวดที่ลอยน้ำด้วยกล้องและระบบสายพาน</p>
+          <div class="welcome-actions hm-actions">
+            <a class="portal-button primary hm-btn hm-btn--primary" href="/monitor" id="enter-monitor">ติดตามเรือ</a>
+            <a class="portal-button secondary hm-btn" href="/demo">ทดลองสาธิต</a>
+          </div>
         </div>
+        <figure class="welcome-vessel hm-sheet-fig">
+          <div class="hm-plate">
+            <div class="hm-print"><img src="/assets/warirak-vessel.svg" width="860" height="680" fetchpriority="high" alt="ภาพแนวคิดเรือวารีรักษ์ ตัวเรือสองทุ่นพร้อมสายพานและแผงโซลาร์"></div>
+          </div>
+          <figcaption>
+            <dl class="hm-titleblock">
+              <div><dt>ชื่อแบบ</dt><dd>ภาพแนวคิดเรือวารีรักษ์</dd></div>
+              <div><dt>แบบ</dt><dd class="num">Rev G</dd></div>
+              <div><dt>มาตราส่วน</dt><dd>ไม่ตามสเกล</dd></div>
+            </dl>
+          </figcaption>
+        </figure>
       </div>
-      <figure class="welcome-vessel">
-        <img src="/assets/warirak-vessel.svg" width="860" height="680" fetchpriority="high" alt="ภาพแนวคิดเรือวารีรักษ์ ตัวเรือสองทุ่นพร้อมสายพานและแผงโซลาร์">
-        <figcaption>ภาพแนวคิดเรือวารีรักษ์</figcaption>
-      </figure>
     </section>
-    <section id="about" class="welcome-about" aria-labelledby="about-title">
-      <h2 id="about-title">เกี่ยวกับโครงงาน</h2>
-      <p>วารีรักษ์เป็นโครงงานของคณะวิศวกรรมศาสตร์ มหาวิทยาลัยทักษิณ สำหรับศึกษาการตรวจจับและเก็บขยะชิ้นเล็กบนผิวน้ำ</p>
+
+    <section id="how-it-works" class="welcome-process hm-section" aria-labelledby="how-title">
+      <div class="container">
+        <div class="hm-head">
+          <h2 id="how-title">การทำงาน</h2>
+        </div>
+        <table class="hm-register">
+          <thead><tr><th scope="col">ลำดับ</th><th scope="col">หน้า</th><th scope="col"><span class="visually-hidden">ลิงก์</span></th></tr></thead>
+          <tbody>
+            <tr><td class="num">01</td><td><h3>ดูภาพจากเรือ</h3><p>เปิดภาพล่าสุดและตรวจสถานะการเชื่อมต่ออุปกรณ์</p></td><td><a class="hm-btn" href="/monitor">เปิดหน้าติดตาม</a></td></tr>
+            <tr><td class="num">02</td><td><h3>ติดตามผลการเก็บขยะ</h3><p>ดูยอดที่ยืนยันเก็บแล้วและดาวน์โหลดรายงานตามช่วงเวลา</p></td><td><a class="hm-btn" href="/monitor#reports">เปิดรายงาน</a></td></tr>
+            <tr><td class="num">03</td><td><h3>ทดลองขับในสระจำลอง</h3><p>เปรียบเทียบการเดินเรือแบบ AI กับกฎพื้นฐาน</p></td><td><a class="hm-btn" href="/demo">เปิดโหมดสาธิต</a></td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
-    <section id="how-it-works" class="welcome-process" aria-label="การทำงาน">
-      <article><h3>ดูภาพจากเรือ</h3><p>เปิดภาพล่าสุดและตรวจสถานะการเชื่อมต่ออุปกรณ์</p><a href="/monitor">เปิดหน้าติดตาม ↗</a></article>
-      <article><h3>ติดตามผลการเก็บขยะ</h3><p>ดูยอดที่ยืนยันเก็บแล้วและดาวน์โหลดรายงานตามช่วงเวลา</p><a href="/monitor#reports">เปิดรายงาน ↗</a></article>
-      <article><h3>ทดลองขับในสระจำลอง</h3><p>เปรียบเทียบการเดินเรือแบบ AI กับกฎพื้นฐาน</p><a href="/demo">เปิดโหมดสาธิต ↗</a></article>
+
+    <section id="specs" class="hm-section hm-band" aria-labelledby="specs-title">
+      <div class="container">
+        <div class="hm-head">
+          <h2 id="specs-title">ค่าตามแบบ</h2>
+          <p>ตัวเลขจากแบบเรือ Rev G ยังไม่ใช่ผลทดสอบในน้ำจริง</p>
+        </div>
+        <dl class="hm-specs">
+          <div><dt>ตัวเรือ</dt><dd>สองทุ่น ท่อ PVC 3 นิ้ว ยาว <span class="num">600 mm</span></dd></div>
+          <div><dt>โครง</dt><dd>เหล็กกล่อง 3/4 นิ้ว <span class="num">480 × 500 mm</span></dd></div>
+          <div><dt>สายพานลำเลียง</dt><dd>เอียง <span class="num">32°</span> กว้าง <span class="num">190 mm</span></dd></div>
+          <div><dt>ขับเคลื่อน</dt><dd>ใบพัด 2 ตัว ซ้ายและขวา</dd></div>
+          <div><dt>พลังงาน</dt><dd>LiPo 2S <span class="num">2200 mAh</span> เสริมโซลาร์ <span class="num">5 W</span></dd></div>
+          <div><dt>ประมวลผล</dt><dd>Raspberry Pi 5 กับกล้อง USB</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section id="about" class="welcome-about hm-section hm-about" aria-labelledby="about-title">
+      <div class="container">
+        <h2 id="about-title">เกี่ยวกับโครงงาน</h2>
+        <p>วารีรักษ์เป็นโครงงานของคณะวิศวกรรมศาสตร์ มหาวิทยาลัยทักษิณ สำหรับศึกษาการตรวจจับและเก็บขยะชิ้นเล็กบนผิวน้ำ</p>
+      </div>
     </section>
   </main>
-  <footer class="portal-footer"><span>คณะวิศวกรรมศาสตร์ มหาวิทยาลัยทักษิณ</span><a href="/login">เข้าสู่ระบบผู้ดูแล ↗</a></footer>
+  <footer class="portal-footer hm-foot">
+    <div class="container">
+      <div class="hm-foot-block">
+        <div><span class="lbl">จัดทำโดย</span><span>คณะวิศวกรรมศาสตร์ มหาวิทยาลัยทักษิณ</span></div>
+        <div><span class="lbl">สำหรับผู้ดูแล</span><a href="/login">เข้าสู่ระบบผู้ดูแล</a></div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
